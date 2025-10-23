@@ -1,5 +1,5 @@
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link } from "@inertiajs/vue3";
 
 defineProps({
     canLogin: {
@@ -19,16 +19,18 @@ defineProps({
 });
 
 function handleImageError() {
-    document.getElementById('screenshot-container')?.classList.add('!hidden');
-    document.getElementById('docs-card')?.classList.add('!row-span-1');
-    document.getElementById('docs-card-content')?.classList.add('!flex-row');
-    document.getElementById('background')?.classList.add('!hidden');
+    document.getElementById("screenshot-container")?.classList.add("!hidden");
+    document.getElementById("docs-card")?.classList.add("!row-span-1");
+    document.getElementById("docs-card-content")?.classList.add("!flex-row");
+    document.getElementById("background")?.classList.add("!hidden");
 }
 </script>
 
 <template>
     <Head title="Welcome" />
-    <div class="tw-bg-gray-50 tw-text-black/50 dark:tw-bg-black dark:tw-text-white/50">
+    <div
+        class="tw-bg-gray-50 tw-text-black/50 dark:tw-bg-black dark:tw-text-white/50"
+    >
         <img
             id="background"
             class="tw-absolute -tw-left-20 tw-top-0 tw-max-w-[877px]"
@@ -37,7 +39,9 @@ function handleImageError() {
         <div
             class="tw-relative tw-flex tw-min-h-screen tw-flex-col tw-items-center tw-justify-center selection:tw-bg-[#FF2D20] selection:tw-text-white"
         >
-            <div class="tw-relative tw-w-full tw-max-w-2xl tw-px-6 lg:tw-max-w-7xl">
+            <div
+                class="tw-relative tw-w-full tw-max-w-2xl tw-px-6 lg:tw-max-w-7xl"
+            >
                 <header
                     class="tw-grid tw-grid-cols-2 tw-items-center tw-gap-2 tw-py-10 lg:tw-grid-cols-3"
                 >
@@ -54,7 +58,10 @@ function handleImageError() {
                             />
                         </svg>
                     </div>
-                    <nav v-if="canLogin" class="-tw-mx-3 tw-flex tw-flex-1 tw-justify-end">
+                    <nav
+                        v-if="canLogin"
+                        class="-tw-mx-3 tw-flex tw-flex-1 tw-justify-end"
+                    >
                         <Link
                             v-if="$page.props.auth.user"
                             :href="route('dashboard')"

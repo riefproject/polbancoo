@@ -8,7 +8,32 @@ const props = defineProps({
     },
     links: {
         type: Array,
-        default: () => [],
+        default: () => [
+            {
+                name: "member.dashboard",
+                label: "Home",
+                icon: "home-o",
+                patterns: ["member.dashboard"],
+            },
+            {
+                name: "member.finances",
+                label: "Keuangan",
+                icon: "balance-o",
+                patterns: ["member.finances"],
+            },
+            {
+                name: "member.status",
+                label: "Status",
+                icon: "todo-list-o",
+                patterns: ["member.status"],
+            },
+            {
+                name: "profile.edit",
+                label: "Profile",
+                icon: "user-circle-o",
+                patterns: ["profile.*"],
+            },
+        ],
     },
     user: {
         type: Object,

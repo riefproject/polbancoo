@@ -1,5 +1,6 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
+import { ShoppingCart } from "lucide-vue-next";
 
 const props = defineProps({
     cartRoute: {
@@ -34,12 +35,9 @@ const props = defineProps({
 
             <Link
                 :href="cartRoute"
-                class="btn-icon tw-relative tw-h-12 tw-w-12 tw-flex-shrink-0 tw-border tw-border-slate-200 tw-bg-white tw-shadow-sm"
+                class="btn-icon tw-relative tw-h-12 tw-w-12 tw-flex-shrink-0"
             >
-                <van-icon
-                    name="shopping-cart-o"
-                    class="tw-text-xl tw-text-slate-600"
-                />
+                <ShoppingCart class="tw-text-3xl tw-text-slate-600" />
                 <span
                     class="tw-absolute tw--right-1 tw--top-1 tw-inline-flex tw-h-5 tw-min-w-[1.25rem] tw-items-center tw-justify-center tw-rounded-full tw-bg-primary tw-px-1 tw-text-[10px] tw-font-semibold tw-text-white"
                 >

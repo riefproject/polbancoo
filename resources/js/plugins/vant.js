@@ -10,7 +10,7 @@ import {
     Tabbar,
     TabbarItem,
     Tag,
-} from 'vant';
+} from "vant";
 
 export function registerVant(app) {
     app.use(ConfigProvider);
