@@ -1,4 +1,16 @@
-import { Button, Card, ConfigProvider, Icon, Tag } from 'vant';
+import {
+    Button,
+    Card,
+    Cell,
+    CellGroup,
+    ConfigProvider,
+    Icon,
+    NavBar,
+    Popup,
+    Tabbar,
+    TabbarItem,
+    Tag,
+} from 'vant';
 
 export function registerVant(app) {
     app.use(ConfigProvider);
@@ -6,5 +18,10 @@ export function registerVant(app) {
     app.use(Card);
     app.use(Tag);
     app.use(Icon);
+    app.use(CellGroup);
+    app.use(Cell);
+    app.use(Popup);
+    app.use(Tabbar);
+    app.use(TabbarItem);
+    app.use(NavBar);
 }
-

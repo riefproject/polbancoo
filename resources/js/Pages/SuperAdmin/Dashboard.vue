@@ -12,23 +12,23 @@ const user = computed(() => page.props.auth.user);
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="text-xl font-semibold leading-tight text-gray-800">
-                Super Admin Control Panel
+            <h2 class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800">
+                Kelola Admin
             </h2>
         </template>
 
-        <div class="py-12">
-            <div class="mx-auto max-w-5xl space-y-6 sm:px-6 lg:px-8">
+        <div class="tw-py-12">
+            <div class="tw-mx-auto tw-max-w-5xl tw-space-y-6 sm:tw-px-6 lg:tw-px-8">
                 <van-card
-                    class="rounded-xl shadow-sm"
+                    class="tw-rounded-xl tw-shadow-sm"
                     :title="`Selamat datang, ${user?.name ?? ''}`"
                 >
                     <template #desc>
-                        <p class="mb-4 text-gray-700">
-                            Anda memiliki akses penuh untuk mengelola pengguna
-                            dan konfigurasi sistem.
+                        <p class="tw-mb-4 tw-text-gray-700">
+                            Kelola akun admin, atur peran, dan pantau aktivitas
+                            pengurus koperasi dari satu tempat.
                         </p>
-                        <div class="flex flex-wrap gap-3">
+                        <div class="tw-flex tw-flex-wrap tw-gap-3">
                             <van-button type="primary" icon="manager-o">
                                 Kelola Admin
                             </van-button>

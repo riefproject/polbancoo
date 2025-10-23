@@ -28,22 +28,22 @@ function handleImageError() {
 
 <template>
     <Head title="Welcome" />
-    <div class="bg-gray-50 text-black/50 dark:bg-black dark:text-white/50">
+    <div class="tw-bg-gray-50 tw-text-black/50 dark:tw-bg-black dark:tw-text-white/50">
         <img
             id="background"
-            class="absolute -left-20 top-0 max-w-[877px]"
+            class="tw-absolute -tw-left-20 tw-top-0 tw-max-w-[877px]"
             src="https://laravel.com/assets/img/welcome/background.svg"
         />
         <div
-            class="relative flex min-h-screen flex-col items-center justify-center selection:bg-[#FF2D20] selection:text-white"
+            class="tw-relative tw-flex tw-min-h-screen tw-flex-col tw-items-center tw-justify-center selection:tw-bg-[#FF2D20] selection:tw-text-white"
         >
-            <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
+            <div class="tw-relative tw-w-full tw-max-w-2xl tw-px-6 lg:tw-max-w-7xl">
                 <header
-                    class="grid grid-cols-2 items-center gap-2 py-10 lg:grid-cols-3"
+                    class="tw-grid tw-grid-cols-2 tw-items-center tw-gap-2 tw-py-10 lg:tw-grid-cols-3"
                 >
-                    <div class="flex lg:col-start-2 lg:justify-center">
+                    <div class="tw-flex lg:tw-col-start-2 lg:tw-justify-center">
                         <svg
-                            class="h-12 w-auto text-white lg:h-16 lg:text-[#FF2D20]"
+                            class="tw-h-12 tw-w-auto tw-text-white lg:tw-h-16 lg:tw-text-[#FF2D20]"
                             viewBox="0 0 62 65"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"
@@ -54,11 +54,11 @@ function handleImageError() {
                             />
                         </svg>
                     </div>
-                    <nav v-if="canLogin" class="-mx-3 flex flex-1 justify-end">
+                    <nav v-if="canLogin" class="-tw-mx-3 tw-flex tw-flex-1 tw-justify-end">
                         <Link
                             v-if="$page.props.auth.user"
                             :href="route('dashboard')"
-                            class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                            class="tw-rounded-md tw-px-3 tw-py-2 tw-text-black tw-ring-1 tw-ring-transparent tw-transition hover:tw-text-black/70 focus:tw-outline-none focus-visible:tw-ring-[#FF2D20] dark:tw-text-white dark:hover:tw-text-white/80 dark:focus-visible:tw-ring-white"
                         >
                             Dashboard
                         </Link>
@@ -66,7 +66,7 @@ function handleImageError() {
                         <template v-else>
                             <Link
                                 :href="route('login')"
-                                class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                class="tw-rounded-md tw-px-3 tw-py-2 tw-text-black tw-ring-1 tw-ring-transparent tw-transition hover:tw-text-black/70 focus:tw-outline-none focus-visible:tw-ring-[#FF2D20] dark:tw-text-white dark:hover:tw-text-white/80 dark:focus-visible:tw-ring-white"
                             >
                                 Log in
                             </Link>
@@ -74,7 +74,7 @@ function handleImageError() {
                             <Link
                                 v-if="canRegister"
                                 :href="route('register')"
-                                class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                                class="tw-rounded-md tw-px-3 tw-py-2 tw-text-black tw-ring-1 tw-ring-transparent tw-transition hover:tw-text-black/70 focus:tw-outline-none focus-visible:tw-ring-[#FF2D20] dark:tw-text-white dark:hover:tw-text-white/80 dark:focus-visible:tw-ring-white"
                             >
                                 Register
                             </Link>
@@ -82,45 +82,45 @@ function handleImageError() {
                     </nav>
                 </header>
 
-                <main class="mt-6">
-                    <div class="grid gap-6 lg:grid-cols-2 lg:gap-8">
+                <main class="tw-mt-6">
+                    <div class="tw-grid tw-gap-6 lg:tw-grid-cols-2 lg:tw-gap-8">
                         <a
                             href="https://laravel.com/docs"
                             id="docs-card"
-                            class="flex flex-col items-start gap-6 overflow-hidden rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] md:row-span-3 lg:p-10 lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
+                            class="tw-flex tw-flex-col tw-items-start tw-gap-6 tw-overflow-hidden tw-rounded-lg tw-bg-white tw-p-6 tw-shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] tw-ring-1 tw-ring-white/[0.05] tw-transition tw-duration-300 hover:tw-text-black/70 hover:tw-ring-black/20 focus:tw-outline-none focus-visible:tw-ring-[#FF2D20] md:tw-row-span-3 lg:tw-p-10 lg:tw-pb-10 dark:tw-bg-zinc-900 dark:tw-ring-zinc-800 dark:hover:tw-text-white/70 dark:hover:tw-ring-zinc-700 dark:focus-visible:tw-ring-[#FF2D20]"
                         >
                             <div
                                 id="screenshot-container"
-                                class="relative flex w-full flex-1 items-stretch"
+                                class="tw-relative tw-flex tw-w-full tw-flex-1 tw-items-stretch"
                             >
                                 <img
                                     src="https://laravel.com/assets/img/welcome/docs-light.svg"
                                     alt="Laravel documentation screenshot"
-                                    class="aspect-video h-full w-full flex-1 rounded-[10px] object-cover object-top drop-shadow-[0px_4px_34px_rgba(0,0,0,0.06)] dark:hidden"
+                                    class="tw-aspect-video tw-h-full tw-w-full tw-flex-1 tw-rounded-[10px] tw-object-cover tw-object-top tw-drop-shadow-[0px_4px_34px_rgba(0,0,0,0.06)] dark:tw-hidden"
                                     @error="handleImageError"
                                 />
                                 <img
                                     src="https://laravel.com/assets/img/welcome/docs-dark.svg"
                                     alt="Laravel documentation screenshot"
-                                    class="hidden aspect-video h-full w-full flex-1 rounded-[10px] object-cover object-top drop-shadow-[0px_4px_34px_rgba(0,0,0,0.25)] dark:block"
+                                    class="tw-hidden tw-aspect-video tw-h-full tw-w-full tw-flex-1 tw-rounded-[10px] tw-object-cover tw-object-top tw-drop-shadow-[0px_4px_34px_rgba(0,0,0,0.25)] dark:tw-block"
                                 />
                                 <div
-                                    class="absolute -bottom-16 -left-16 h-40 w-[calc(100%+8rem)] bg-gradient-to-b from-transparent via-white to-white dark:via-zinc-900 dark:to-zinc-900"
+                                    class="tw-absolute -tw-bottom-16 -tw-left-16 tw-h-40 tw-w-[calc(100%+8rem)] tw-bg-gradient-to-b tw-from-transparent tw-via-white tw-to-white dark:tw-via-zinc-900 dark:tw-to-zinc-900"
                                 ></div>
                             </div>
 
                             <div
-                                class="relative flex items-center gap-6 lg:items-end"
+                                class="tw-relative tw-flex tw-items-center tw-gap-6 lg:tw-items-end"
                             >
                                 <div
                                     id="docs-card-content"
-                                    class="flex items-start gap-6 lg:flex-col"
+                                    class="tw-flex tw-items-start tw-gap-6 lg:tw-flex-col"
                                 >
                                     <div
-                                        class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16"
+                                        class="tw-flex tw-size-12 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-full tw-bg-[#FF2D20]/10 sm:tw-size-16"
                                     >
                                         <svg
-                                            class="size-5 sm:size-6"
+                                            class="tw-size-5 sm:tw-size-6"
                                             xmlns="http://www.w3.org/2000/svg"
                                             fill="none"
                                             viewBox="0 0 24 24"
@@ -136,14 +136,14 @@ function handleImageError() {
                                         </svg>
                                     </div>
 
-                                    <div class="pt-3 sm:pt-5 lg:pt-0">
+                                    <div class="tw-pt-3 sm:tw-pt-5 lg:tw-pt-0">
                                         <h2
-                                            class="text-xl font-semibold text-black dark:text-white"
+                                            class="tw-text-xl tw-font-semibold tw-text-black dark:tw-text-white"
                                         >
                                             Documentation
                                         </h2>
 
-                                        <p class="mt-4 text-sm/relaxed">
+                                        <p class="tw-mt-4 tw-text-sm/relaxed">
                                             Laravel has wonderful documentation
                                             covering every aspect of the
                                             framework. Whether you are a
@@ -156,7 +156,7 @@ function handleImageError() {
                                 </div>
 
                                 <svg
-                                    class="size-6 shrink-0 stroke-[#FF2D20]"
+                                    class="tw-size-6 tw-shrink-0 tw-stroke-[#FF2D20]"
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
@@ -173,13 +173,13 @@ function handleImageError() {
 
                         <a
                             href="https://laracasts.com"
-                            class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
+                            class="tw-flex tw-items-start tw-gap-4 tw-rounded-lg tw-bg-white tw-p-6 tw-shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] tw-ring-1 tw-ring-white/[0.05] tw-transition tw-duration-300 hover:tw-text-black/70 hover:tw-ring-black/20 focus:tw-outline-none focus-visible:tw-ring-[#FF2D20] lg:tw-pb-10 dark:tw-bg-zinc-900 dark:tw-ring-zinc-800 dark:hover:tw-text-white/70 dark:hover:tw-ring-zinc-700 dark:focus-visible:tw-ring-[#FF2D20]"
                         >
                             <div
-                                class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16"
+                                class="tw-flex tw-size-12 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-full tw-bg-[#FF2D20]/10 sm:tw-size-16"
                             >
                                 <svg
-                                    class="size-5 sm:size-6"
+                                    class="tw-size-5 sm:tw-size-6"
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
@@ -192,14 +192,14 @@ function handleImageError() {
                                 </svg>
                             </div>
 
-                            <div class="pt-3 sm:pt-5">
+                            <div class="tw-pt-3 sm:tw-pt-5">
                                 <h2
-                                    class="text-xl font-semibold text-black dark:text-white"
+                                    class="tw-text-xl tw-font-semibold tw-text-black dark:tw-text-white"
                                 >
                                     Laracasts
                                 </h2>
 
-                                <p class="mt-4 text-sm/relaxed">
+                                <p class="tw-mt-4 tw-text-sm/relaxed">
                                     Laracasts offers thousands of video
                                     tutorials on Laravel, PHP, and JavaScript
                                     development. Check them out, see for
@@ -209,7 +209,7 @@ function handleImageError() {
                             </div>
 
                             <svg
-                                class="size-6 shrink-0 self-center stroke-[#FF2D20]"
+                                class="tw-size-6 tw-shrink-0 tw-self-center tw-stroke-[#FF2D20]"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
@@ -225,13 +225,13 @@ function handleImageError() {
 
                         <a
                             href="https://laravel-news.com"
-                            class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] transition duration-300 hover:text-black/70 hover:ring-black/20 focus:outline-none focus-visible:ring-[#FF2D20] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800 dark:hover:text-white/70 dark:hover:ring-zinc-700 dark:focus-visible:ring-[#FF2D20]"
+                            class="tw-flex tw-items-start tw-gap-4 tw-rounded-lg tw-bg-white tw-p-6 tw-shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] tw-ring-1 tw-ring-white/[0.05] tw-transition tw-duration-300 hover:tw-text-black/70 hover:tw-ring-black/20 focus:tw-outline-none focus-visible:tw-ring-[#FF2D20] lg:tw-pb-10 dark:tw-bg-zinc-900 dark:tw-ring-zinc-800 dark:hover:tw-text-white/70 dark:hover:tw-ring-zinc-700 dark:focus-visible:tw-ring-[#FF2D20]"
                         >
                             <div
-                                class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16"
+                                class="tw-flex tw-size-12 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-full tw-bg-[#FF2D20]/10 sm:tw-size-16"
                             >
                                 <svg
-                                    class="size-5 sm:size-6"
+                                    class="tw-size-5 sm:tw-size-6"
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
@@ -250,14 +250,14 @@ function handleImageError() {
                                 </svg>
                             </div>
 
-                            <div class="pt-3 sm:pt-5">
+                            <div class="tw-pt-3 sm:tw-pt-5">
                                 <h2
-                                    class="text-xl font-semibold text-black dark:text-white"
+                                    class="tw-text-xl tw-font-semibold tw-text-black dark:tw-text-white"
                                 >
                                     Laravel News
                                 </h2>
 
-                                <p class="mt-4 text-sm/relaxed">
+                                <p class="tw-mt-4 tw-text-sm/relaxed">
                                     Laravel News is a community driven portal
                                     and newsletter aggregating all of the latest
                                     and most important news in the Laravel
@@ -267,7 +267,7 @@ function handleImageError() {
                             </div>
 
                             <svg
-                                class="size-6 shrink-0 self-center stroke-[#FF2D20]"
+                                class="tw-size-6 tw-shrink-0 tw-self-center tw-stroke-[#FF2D20]"
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
@@ -282,13 +282,13 @@ function handleImageError() {
                         </a>
 
                         <div
-                            class="flex items-start gap-4 rounded-lg bg-white p-6 shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] ring-1 ring-white/[0.05] lg:pb-10 dark:bg-zinc-900 dark:ring-zinc-800"
+                            class="tw-flex tw-items-start tw-gap-4 tw-rounded-lg tw-bg-white tw-p-6 tw-shadow-[0px_14px_34px_0px_rgba(0,0,0,0.08)] tw-ring-1 tw-ring-white/[0.05] lg:tw-pb-10 dark:tw-bg-zinc-900 dark:tw-ring-zinc-800"
                         >
                             <div
-                                class="flex size-12 shrink-0 items-center justify-center rounded-full bg-[#FF2D20]/10 sm:size-16"
+                                class="tw-flex tw-size-12 tw-shrink-0 tw-items-center tw-justify-center tw-rounded-full tw-bg-[#FF2D20]/10 sm:tw-size-16"
                             >
                                 <svg
-                                    class="size-5 sm:size-6"
+                                    class="tw-size-5 sm:tw-size-6"
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
@@ -301,39 +301,39 @@ function handleImageError() {
                                 </svg>
                             </div>
 
-                            <div class="pt-3 sm:pt-5">
+                            <div class="tw-pt-3 sm:tw-pt-5">
                                 <h2
-                                    class="text-xl font-semibold text-black dark:text-white"
+                                    class="tw-text-xl tw-font-semibold tw-text-black dark:tw-text-white"
                                 >
                                     Vibrant Ecosystem
                                 </h2>
 
-                                <p class="mt-4 text-sm/relaxed">
+                                <p class="tw-mt-4 tw-text-sm/relaxed">
                                     Laravel's robust library of first-party
                                     tools and libraries, such as
                                     <a
                                         href="https://forge.laravel.com"
-                                        class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white dark:focus-visible:ring-[#FF2D20]"
+                                        class="tw-rounded-sm tw-underline hover:tw-text-black focus:tw-outline-none focus-visible:tw-ring-1 focus-visible:tw-ring-[#FF2D20] dark:hover:tw-text-white dark:focus-visible:tw-ring-[#FF2D20]"
                                         >Forge</a
                                     >,
                                     <a
                                         href="https://vapor.laravel.com"
-                                        class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white"
+                                        class="tw-rounded-sm tw-underline hover:tw-text-black focus:tw-outline-none focus-visible:tw-ring-1 focus-visible:tw-ring-[#FF2D20] dark:hover:tw-text-white"
                                         >Vapor</a
                                     >,
                                     <a
                                         href="https://nova.laravel.com"
-                                        class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white"
+                                        class="tw-rounded-sm tw-underline hover:tw-text-black focus:tw-outline-none focus-visible:tw-ring-1 focus-visible:tw-ring-[#FF2D20] dark:hover:tw-text-white"
                                         >Nova</a
                                     >,
                                     <a
                                         href="https://envoyer.io"
-                                        class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white"
+                                        class="tw-rounded-sm tw-underline hover:tw-text-black focus:tw-outline-none focus-visible:tw-ring-1 focus-visible:tw-ring-[#FF2D20] dark:hover:tw-text-white"
                                         >Envoyer</a
                                     >, and
                                     <a
                                         href="https://herd.laravel.com"
-                                        class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white"
+                                        class="tw-rounded-sm tw-underline hover:tw-text-black focus:tw-outline-none focus-visible:tw-ring-1 focus-visible:tw-ring-[#FF2D20] dark:hover:tw-text-white"
                                         >Herd</a
                                     >
                                     help you take your projects to the next
@@ -341,32 +341,32 @@ function handleImageError() {
                                     libraries like
                                     <a
                                         href="https://laravel.com/docs/billing"
-                                        class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white"
+                                        class="tw-rounded-sm tw-underline hover:tw-text-black focus:tw-outline-none focus-visible:tw-ring-1 focus-visible:tw-ring-[#FF2D20] dark:hover:tw-text-white"
                                         >Cashier</a
                                     >,
                                     <a
                                         href="https://laravel.com/docs/dusk"
-                                        class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white"
+                                        class="tw-rounded-sm tw-underline hover:tw-text-black focus:tw-outline-none focus-visible:tw-ring-1 focus-visible:tw-ring-[#FF2D20] dark:hover:tw-text-white"
                                         >Dusk</a
                                     >,
                                     <a
                                         href="https://laravel.com/docs/broadcasting"
-                                        class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white"
+                                        class="tw-rounded-sm tw-underline hover:tw-text-black focus:tw-outline-none focus-visible:tw-ring-1 focus-visible:tw-ring-[#FF2D20] dark:hover:tw-text-white"
                                         >Echo</a
                                     >,
                                     <a
                                         href="https://laravel.com/docs/horizon"
-                                        class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white"
+                                        class="tw-rounded-sm tw-underline hover:tw-text-black focus:tw-outline-none focus-visible:tw-ring-1 focus-visible:tw-ring-[#FF2D20] dark:hover:tw-text-white"
                                         >Horizon</a
                                     >,
                                     <a
                                         href="https://laravel.com/docs/sanctum"
-                                        class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white"
+                                        class="tw-rounded-sm tw-underline hover:tw-text-black focus:tw-outline-none focus-visible:tw-ring-1 focus-visible:tw-ring-[#FF2D20] dark:hover:tw-text-white"
                                         >Sanctum</a
                                     >,
                                     <a
                                         href="https://laravel.com/docs/telescope"
-                                        class="rounded-sm underline hover:text-black focus:outline-none focus-visible:ring-1 focus-visible:ring-[#FF2D20] dark:hover:text-white"
+                                        class="tw-rounded-sm tw-underline hover:tw-text-black focus:tw-outline-none focus-visible:tw-ring-1 focus-visible:tw-ring-[#FF2D20] dark:hover:tw-text-white"
                                         >Telescope</a
                                     >, and more.
                                 </p>
@@ -376,7 +376,7 @@ function handleImageError() {
                 </main>
 
                 <footer
-                    class="py-16 text-center text-sm text-black dark:text-white/70"
+                    class="tw-py-16 tw-text-center tw-text-sm tw-text-black dark:tw-text-white/70"
                 >
                     Laravel v{{ laravelVersion }} (PHP v{{ phpVersion }})
                 </footer>

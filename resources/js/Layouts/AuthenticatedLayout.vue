@@ -1,243 +1,210 @@
 <script setup>
-import { computed, ref } from "vue";
-import ApplicationLogo from "@/Components/ApplicationLogo.vue";
-import Dropdown from "@/Components/Dropdown.vue";
-import DropdownLink from "@/Components/DropdownLink.vue";
-import NavLink from "@/Components/NavLink.vue";
-import ResponsiveNavLink from "@/Components/ResponsiveNavLink.vue";
-import { Link } from "@inertiajs/vue3";
-import { usePage } from "@inertiajs/vue3";
+import { computed, ref, watch } from "vue";
+import { router, usePage } from "@inertiajs/vue3";
 
-const showingNavigationDropdown = ref(false);
+import AdminSidebar from "@/Components/navigation/AdminSidebar.vue";
+import AdminMobileNav from "@/Components/navigation/AdminMobileNav.vue";
+import MemberTopBar from "@/Components/navigation/MemberTopBar.vue";
+import MemberBottomNav from "@/Components/navigation/MemberBottomNav.vue";
+import MemberMobileSearchBar from "@/Components/navigation/MemberMobileSearchBar.vue";
+
 const page = usePage();
 
 const roles = computed(() => new Set(page.props.auth?.roles ?? []));
+const user = computed(() => page.props.auth?.user ?? null);
 
 const hasRole = (role) => roles.value.has(role);
-const hasAnyRole = (...roleNames) =>
-    roleNames.some((role) => roles.value.has(role));
+
+const isSuperAdmin = computed(() => hasRole("Super Admin"));
+const isAdminLike = computed(() => isSuperAdmin.value || hasRole("Admin"));
+
+const adminLinks = [
+    {
+        name: "admin.dashboard",
+        label: "Dashboard",
+        icon: "wap-home-o",
+        patterns: ["admin.dashboard"],
+    },
+    {
+        name: "admin.products",
+        label: "Kelola Produk",
+        icon: "shop-o",
+        patterns: ["admin.products"],
+    },
+    {
+        name: "admin.members",
+        label: "Kelola Anggota",
+        icon: "friends-o",
+        patterns: ["admin.members"],
+    },
+    {
+        name: "admin.approvals",
+        label: "Approval",
+        icon: "todo-list-o",
+        patterns: ["admin.approvals"],
+    },
+    {
+        name: "admin.ledger",
+        label: "Ledger",
+        icon: "notes-o",
+        patterns: ["admin.ledger"],
+    },
+    {
+        name: "profile.edit",
+        label: "Profile",
+        icon: "user-o",
+        patterns: ["profile.*"],
+    },
+];
+
+const superAdminLinks = [
+    {
+        name: "superadmin.dashboard",
+        label: "Kelola Admin",
+        icon: "manager-o",
+        patterns: ["superadmin.dashboard"],
+    },
+    {
+        name: "profile.edit",
+        label: "Profile",
+        icon: "user-o",
+        patterns: ["profile.*"],
+    },
+];
+
+const memberLinks = [
+    {
+        name: "member.dashboard",
+        label: "Home",
+        icon: "home-o",
+        patterns: ["member.dashboard"],
+    },
+    {
+        name: "member.finances",
+        label: "Keuangan",
+        icon: "balance-o",
+        patterns: ["member.finances"],
+    },
+    {
+        name: "member.status",
+        label: "Status",
+        icon: "todo-list-o",
+        patterns: ["member.status"],
+    },
+    {
+        name: "profile.edit",
+        label: "Profile",
+        icon: "user-circle-o",
+        patterns: ["profile.*"],
+    },
+];
+
+const sidebarOpen = ref(false);
+
+const isActive = (patterns) =>
+    (patterns ?? []).some((pattern) => route().current(pattern));
+
+const currentSidebarLinks = computed(() =>
+    (isSuperAdmin.value ? superAdminLinks : adminLinks).map((link) => ({
+        ...link,
+        href: route(link.name),
+        active: isActive(link.patterns ?? [link.name]),
+    }))
+);
+
+const sidebarTitle = computed(() =>
+    isSuperAdmin.value ? "KopSy Super Admin" : "KopSy Admin"
+);
+
+const currentMemberLinks = computed(() =>
+    memberLinks.map((link) => ({
+        ...link,
+        href: route(link.name),
+        active: isActive(link.patterns ?? [link.name]),
+    }))
+);
+
+const memberActiveIndex = computed(() => {
+    const index = currentMemberLinks.value.findIndex((link) => link.active);
+
+    return index >= 0 ? index : 0;
+});
+
+const navigateMember = (index) => {
+    const target = currentMemberLinks.value[index];
+
+    if (target) {
+        router.visit(target.href);
+    }
+};
+
+watch(
+    () => page.url,
+    () => {
+        sidebarOpen.value = false;
+    }
+);
 </script>
 
 <template>
-    <div>
-        <div class="min-h-screen bg-gray-100">
-            <nav class="border-b border-gray-100 bg-white">
-                <!-- Primary Navigation Menu -->
-                <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div class="flex h-16 justify-between">
-                        <div class="flex">
-                            <!-- Logo -->
-                            <div class="flex shrink-0 items-center">
-                                <Link :href="route('dashboard')">
-                                    <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800"
-                                    />
-                                </Link>
-                            </div>
+    <div class="tw-min-h-screen tw-bg-gray-100">
+        <div v-if="isAdminLike" class="tw-flex tw-min-h-screen">
+            <AdminSidebar
+                :links="currentSidebarLinks"
+                :title="sidebarTitle"
+                :user="user"
+            />
 
-                            <!-- Navigation Links -->
-                            <div
-                                class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex"
-                            >
-                                <NavLink
-                                    :href="route('dashboard')"
-                                    :active="route().current('dashboard')"
-                                >
-                                    Dashboard
-                                </NavLink>
-                                <NavLink
-                                    v-if="hasRole('Super Admin')"
-                                    :href="route('superadmin.dashboard')"
-                                    :active="
-                                        route().current('superadmin.dashboard')
-                                    "
-                                >
-                                    Super Admin
-                                </NavLink>
-                                <NavLink
-                                    v-if="hasRole('Admin')"
-                                    :href="route('admin.dashboard')"
-                                    :active="route().current('admin.dashboard')"
-                                >
-                                    Admin
-                                </NavLink>
-                                <NavLink
-                                    v-if="hasRole('Anggota')"
-                                    :href="route('member.dashboard')"
-                                    :active="
-                                        route().current('member.dashboard')
-                                    "
-                                >
-                                    Member
-                                </NavLink>
-                            </div>
-                        </div>
+            <div class="tw-flex tw-flex-1 tw-flex-col">
+                <AdminMobileNav
+                    v-model="sidebarOpen"
+                    :links="currentSidebarLinks"
+                    :user="user"
+                />
 
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
-                            <!-- Settings Dropdown -->
-                            <div class="relative ms-3">
-                                <Dropdown align="right" width="48">
-                                    <template #trigger>
-                                        <span class="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                class="inline-flex items-center rounded-md border border-transparent bg-white px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out hover:text-gray-700 focus:outline-none"
-                                            >
-                                                {{ $page.props.auth.user.name }}
-
-                                                <svg
-                                                    class="-me-0.5 ms-2 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fill-rule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </template>
-
-                                    <template #content>
-                                        <DropdownLink
-                                            :href="route('profile.edit')"
-                                        >
-                                            Profile
-                                        </DropdownLink>
-                                        <DropdownLink
-                                            :href="route('logout')"
-                                            method="post"
-                                            as="button"
-                                        >
-                                            Log Out
-                                        </DropdownLink>
-                                    </template>
-                                </Dropdown>
-                            </div>
-                        </div>
-
-                        <!-- Hamburger -->
-                        <div class="-me-2 flex items-center sm:hidden">
-                            <button
-                                @click="
-                                    showingNavigationDropdown =
-                                        !showingNavigationDropdown
-                                "
-                                class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 transition duration-150 ease-in-out hover:bg-gray-100 hover:text-gray-500 focus:bg-gray-100 focus:text-gray-500 focus:outline-none"
-                            >
-                                <svg
-                                    class="h-6 w-6"
-                                    stroke="currentColor"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        :class="{
-                                            hidden: showingNavigationDropdown,
-                                            'inline-flex':
-                                                !showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        :class="{
-                                            hidden: !showingNavigationDropdown,
-                                            'inline-flex':
-                                                showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Responsive Navigation Menu -->
-                <div
-                    :class="{
-                        block: showingNavigationDropdown,
-                        hidden: !showingNavigationDropdown,
-                    }"
-                    class="sm:hidden"
+                <header
+                    v-if="$slots.header"
+                    class="tw-border-b tw-border-slate-200 tw-bg-white"
                 >
-                    <div class="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink
-                            :href="route('dashboard')"
-                            :active="route().current('dashboard')"
-                        >
-                            Dashboard
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            v-if="hasRole('Super Admin')"
-                            :href="route('superadmin.dashboard')"
-                            :active="route().current('superadmin.dashboard')"
-                        >
-                            Super Admin
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            v-if="hasAnyRole('Admin', 'Super Admin')"
-                            :href="route('admin.dashboard')"
-                            :active="route().current('admin.dashboard')"
-                        >
-                            Admin
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            v-if="hasRole('Anggota')"
-                            :href="route('member.dashboard')"
-                            :active="route().current('member.dashboard')"
-                        >
-                            Member
-                        </ResponsiveNavLink>
+                    <div class="tw-px-4 tw-py-6 sm:tw-px-6 lg:tw-px-8">
+                        <slot name="header" />
                     </div>
+                </header>
 
-                    <!-- Responsive Settings Options -->
-                    <div class="border-t border-gray-200 pb-1 pt-4">
-                        <div class="px-4">
-                            <div class="text-base font-medium text-gray-800">
-                                {{ $page.props.auth.user.name }}
-                            </div>
-                            <div class="text-sm font-medium text-gray-500">
-                                {{ $page.props.auth.user.email }}
-                            </div>
-                        </div>
-
-                        <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')">
-                                Profile
-                            </ResponsiveNavLink>
-                            <ResponsiveNavLink
-                                :href="route('logout')"
-                                method="post"
-                                as="button"
-                            >
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
+                <main class="tw-flex-1">
+                    <div class="tw-px-4 tw-py-6 sm:tw-px-6 lg:tw-px-8">
+                        <slot />
                     </div>
-                </div>
-            </nav>
+                </main>
+            </div>
+        </div>
 
-            <!-- Page Heading -->
-            <header class="bg-white shadow" v-if="$slots.header">
-                <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+        <div v-else class="tw-flex tw-min-h-screen tw-flex-col">
+            <MemberMobileSearchBar :cart-route="route('member.cart')" />
+            <MemberTopBar :links="currentMemberLinks" :user="user" />
+
+            <header
+                v-if="$slots.header"
+                class="tw-border-b tw-border-slate-200 tw-bg-white"
+            >
+                <div class="tw-px-4 tw-py-6 sm:tw-px-6 lg:tw-px-8">
                     <slot name="header" />
                 </div>
             </header>
 
-            <!-- Page Content -->
-            <main>
-                <slot />
+            <main class="tw-flex-1">
+                <div
+                    class="tw-px-4 tw-py-6 tw-pb-24 sm:tw-px-6 lg:tw-px-8 md:tw-pb-12"
+                >
+                    <slot />
+                </div>
             </main>
+
+            <MemberBottomNav
+                :links="currentMemberLinks"
+                :model-value="memberActiveIndex"
+                @navigate="navigateMember"
+            />
         </div>
     </div>
 </template>

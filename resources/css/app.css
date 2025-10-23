@@ -1,3 +1,88 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+    :root {
+        --color-primary: #f97316;
+        --color-secondary: #1e3a8a;
+        --color-ternary: #f59e0b;
+        --color-primary-contrast: #ffffff;
+        --color-secondary-contrast: #ffffff;
+        --color-ternary-contrast: #1f2937;
+        --color-secondary-light: rgba(30, 58, 138, 0.12);
+        --color-surface: #ffffff;
+        --color-muted: #f8fafc;
+    }
+}
+
+@layer components {
+    .bg-primary {
+        background-color: var(--color-primary);
+    }
+
+    .bg-secondary {
+        background-color: var(--color-secondary);
+    }
+
+    .bg-ternary {
+        background-color: var(--color-ternary);
+    }
+
+    .text-primary {
+        color: var(--color-primary);
+    }
+
+    .text-secondary {
+        color: var(--color-secondary);
+    }
+
+    .text-ternary {
+        color: var(--color-ternary);
+    }
+
+    .border-primary {
+        border-color: var(--color-primary);
+    }
+
+    .hover\:bg-secondary-light:hover {
+        background-color: var(--color-secondary-light);
+    }
+
+    .btn {
+        @apply tw-inline-flex tw-items-center tw-justify-center tw-rounded-lg tw-px-3 tw-py-2 tw-text-sm tw-font-semibold tw-transition;
+    }
+
+    .btn-sm {
+        @apply tw-px-2.5 tw-py-1.5 tw-text-xs tw-font-semibold;
+    }
+
+    .btn-primary {
+        background-color: var(--color-primary);
+        color: var(--color-primary-contrast);
+    }
+
+    .btn-primary:hover {
+        filter: brightness(0.95);
+    }
+
+    .btn-outline {
+        border: 1px solid var(--color-secondary);
+        color: var(--color-secondary);
+        background-color: transparent;
+    }
+
+    .btn-outline:hover {
+        background-color: var(--color-secondary-light);
+    }
+
+    .btn-icon {
+        @apply tw-inline-flex tw-items-center tw-justify-center tw-rounded-full tw-p-2 tw-transition;
+        color: #475569;
+    }
+
+    .btn-icon:hover {
+        background-color: var(--color-secondary-light);
+        color: var(--color-primary);
+    }
+}

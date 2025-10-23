@@ -42,12 +42,40 @@ Route::middleware(['auth', 'verified', 'role:Admin,Super Admin'])->group(functio
     Route::get('/admin/dashboard', function () {
         return Inertia::render('Admin/Dashboard');
     })->name('admin.dashboard');
+
+    Route::get('/admin/products', function () {
+        return Inertia::render('Admin/Products');
+    })->name('admin.products');
+
+    Route::get('/admin/members', function () {
+        return Inertia::render('Admin/Members');
+    })->name('admin.members');
+
+    Route::get('/admin/approvals', function () {
+        return Inertia::render('Admin/Approvals');
+    })->name('admin.approvals');
+
+    Route::get('/admin/ledger', function () {
+        return Inertia::render('Admin/Ledger');
+    })->name('admin.ledger');
 });
 
 Route::middleware(['auth', 'verified', 'role:Anggota'])->group(function () {
     Route::get('/member/dashboard', function () {
         return Inertia::render('Member/Dashboard');
     })->name('member.dashboard');
+
+    Route::get('/member/cart', function () {
+        return Inertia::render('Member/Cart');
+    })->name('member.cart');
+
+    Route::get('/member/finances', function () {
+        return Inertia::render('Member/Finances');
+    })->name('member.finances');
+
+    Route::get('/member/status', function () {
+        return Inertia::render('Member/Status');
+    })->name('member.status');
 });
 
 Route::middleware('auth')->group(function () {

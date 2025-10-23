@@ -4,6 +4,7 @@ import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
 import { Head } from '@inertiajs/vue3';
+import { Link } from '@inertiajs/vue3';
 
 defineProps({
     mustVerifyEmail: {
@@ -21,34 +22,42 @@ defineProps({
     <AuthenticatedLayout>
         <template #header>
             <h2
-                class="text-xl font-semibold leading-tight text-gray-800"
+                class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800"
             >
                 Profile
             </h2>
         </template>
 
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
+        <div class="tw-py-12">
+            <div class="tw-mx-auto tw-max-w-7xl tw-space-y-6 sm:tw-px-6 lg:tw-px-8">
                 <div
-                    class="bg-white p-4 shadow sm:rounded-lg sm:p-8"
+                    class="tw-bg-white tw-p-4 tw-shadow sm:tw-rounded-lg sm:tw-p-8"
                 >
                     <UpdateProfileInformationForm
                         :must-verify-email="mustVerifyEmail"
                         :status="status"
-                        class="max-w-xl"
+                        class="tw-max-w-xl"
                     />
                 </div>
 
-                <div
-                    class="bg-white p-4 shadow sm:rounded-lg sm:p-8"
-                >
-                    <UpdatePasswordForm class="max-w-xl" />
+                <div class="tw-bg-white tw-p-4 tw-shadow sm:tw-rounded-lg sm:tw-p-8">
+                    <UpdatePasswordForm class="tw-max-w-xl" />
                 </div>
 
-                <div
-                    class="bg-white p-4 shadow sm:rounded-lg sm:p-8"
-                >
-                    <DeleteUserForm class="max-w-xl" />
+                <div class="tw-bg-white tw-p-4 tw-shadow sm:tw-rounded-lg sm:tw-p-8">
+                    <DeleteUserForm class="tw-max-w-xl" />
+                </div>
+
+                <div class="tw-flex tw-justify-end">
+                    <Link
+                        :href="route('logout')"
+                        method="post"
+                        as="button"
+                        class="btn btn-primary"
+                    >
+                        <van-icon name="logout" class="tw-me-2 tw-text-base" />
+                        Logout
+                    </Link>
                 </div>
             </div>
         </div>
