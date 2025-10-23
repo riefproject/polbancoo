@@ -32,7 +32,7 @@ const props = defineProps({
 
 <template>
     <header
-        class="tw-sticky tw-top-0 tw-z-40 tw-border-slate-200 tw-bg-white/95 tw-backdrop-blur md:tw-block"
+        class="tw-hidden tw-sticky tw-top-0 tw-z-40 tw-border-slate-200 tw-bg-white/95 tw-backdrop-blur md:tw-block"
     >
         <div class="tw-flex tw-items-center tw-justify-between tw-px-6 tw-py-4">
             <div

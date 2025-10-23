@@ -47,10 +47,10 @@ const resolveIcon = (icon) => {
 
 <template>
     <section
-        class="tw-rounded-2xl tw-border tw-border-slate-200 tw-bg-white tw-px-6 tw-py-5 tw-shadow-sm"
+        class="tw-rounded-2xl tw-border tw-border-slate-200 tw-bg-white tw-px-1 md:tw-px-6 tw-py-1 md:tw-py-5 tw-shadow-sm"
     >
         <div
-            class="tw-grid tw-grid-rows-2 lg:tw-grid-rows-1 tw-grid-flow-col tw-gap-3 lg:tw-gap-5 tw-overflow-x-auto tw-pb-2 tw-pr-1"
+            class="wrapper tw-grid tw-grid-rows-1 lg:tw-grid-rows-1 tw-grid-flow-col tw-gap-1 lg:tw-gap-5 tw-overflow-x-auto tw-pb-2 tw-pr-1"
         >
             <component
                 v-for="action in actions"
@@ -58,7 +58,7 @@ const resolveIcon = (icon) => {
                 :key="action.label"
                 :href="action.href || undefined"
                 :aria-disabled="isDisabled(action)"
-                class="tw-flex tw-w-28 tw-min-w-[7rem] tw-flex-col tw-items-center tw-gap-3 tw-rounded-xl tw-p-3 tw-text-center tw-transition"
+                class="tw-flex tw-w-28 tw-min-w-[7rem] tw-flex-col tw-items-center tw-gap-1 tw-rounded-xl tw-p-3 tw-text-center tw-transition"
                 :class="{
                     'tw-cursor-not-allowed tw-opacity-60 hover:tw-bg-slate-50':
                         isDisabled(action),
@@ -66,23 +66,37 @@ const resolveIcon = (icon) => {
                 @click="(event) => handleClick(event, action)"
             >
                 <span
-                    class="tw-flex tw-h-16 tw-w-16 tw-items-center tw-justify-center tw-rounded-3xl tw-bg-white tw-text-primary tw-shadow"
+                    class="tw-flex tw-h-8 tw-w-8 md:tw-h-16 md:tw-w-16 tw-items-center tw-justify-center tw-rounded-3xl tw-bg-white tw-text-primary tw-shadow"
                 >
                     <component
                         :is="resolveIcon(action.icon)"
-                        class="tw-h-8 tw-w-8"
+                        class="tw-h-4 tw-w-4 md:tw-h-8 md:tw-w-8"
                     />
                 </span>
-                <div class="tw-text-sm tw-font-semibold tw-text-slate-700">
+                <div
+                    class="tw-text-xs md:tw-text-sm tw-font-semibold tw-text-slate-700"
+                >
                     <p>{{ action.label }}</p>
-                    <p
-                        v-if="isDisabled(action)"
-                        class="tw-mt-1 tw-text-[10px] tw-font-semibold tw-uppercase tw-text-primary"
-                    >
-                        Segera hadir
-                    </p>
                 </div>
             </component>
         </div>
     </section>
 </template>
+
+<style scoped>
+/* x-Scrollbar custom */
+.wrapper::-webkit-scrollbar {
+    height: 3px;
+    border-radius: 999px;
+}
+.wrapper::-webkit-scrollbar-track {
+    background: transparent;
+    width: 10px;
+    border-radius: 999px;
+}
+.wrapper::-webkit-scrollbar-thumb {
+    background-color: var(--color-primary);
+    border-radius: 3px;
+    width: 10px;
+}
+</style>
