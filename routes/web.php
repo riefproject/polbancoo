@@ -1,82 +1,53 @@
 <?php
 
+use App\Http\Controllers\Admin\ApprovalsController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\LedgerController;
+use App\Http\Controllers\Admin\MembersController;
+use App\Http\Controllers\Admin\ProductsController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Member\CartController;
+use App\Http\Controllers\Member\DashboardController as MemberDashboardController;
+use App\Http\Controllers\Member\FinancesController;
+use App\Http\Controllers\Member\StatusController;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
+use App\Http\Controllers\SuperAdmin\DashboardController as SuperAdminDashboardController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+Route::get('/', WelcomeController::class)->name('welcome');
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', DashboardController::class)->name('dashboard');
 });
 
-Route::get('/dashboard', function () {
-    $user = request()->user();
+Route::prefix('superadmin')
+    ->name('superadmin.')
+    ->middleware(['auth', 'verified', 'role:Super Admin'])
+    ->group(function () {
+        Route::get('/dashboard', SuperAdminDashboardController::class)->name('dashboard');
+    });
 
-    if ($user?->hasRole('Super Admin')) {
-        return redirect()->route('superadmin.dashboard');
-    }
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware(['auth', 'verified', 'role:Admin,Super Admin'])
+    ->group(function () {
+        Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
+        Route::get('/products', [ProductsController::class, 'index'])->name('products');
+        Route::get('/members', [MembersController::class, 'index'])->name('members');
+        Route::get('/approvals', [ApprovalsController::class, 'index'])->name('approvals');
+        Route::get('/ledger', [LedgerController::class, 'index'])->name('ledger');
+    });
 
-    if ($user?->hasRole('Admin')) {
-        return redirect()->route('admin.dashboard');
-    }
-
-    if ($user?->hasRole('Anggota')) {
-        return redirect()->route('member.dashboard');
-    }
-
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
-
-Route::middleware(['auth', 'verified', 'role:Super Admin'])->group(function () {
-    Route::get('/superadmin/dashboard', function () {
-        return Inertia::render('SuperAdmin/Dashboard');
-    })->name('superadmin.dashboard');
-});
-
-Route::middleware(['auth', 'verified', 'role:Admin,Super Admin'])->group(function () {
-    Route::get('/admin/dashboard', function () {
-        return Inertia::render('Admin/Dashboard');
-    })->name('admin.dashboard');
-
-    Route::get('/admin/products', function () {
-        return Inertia::render('Admin/Products');
-    })->name('admin.products');
-
-    Route::get('/admin/members', function () {
-        return Inertia::render('Admin/Members');
-    })->name('admin.members');
-
-    Route::get('/admin/approvals', function () {
-        return Inertia::render('Admin/Approvals');
-    })->name('admin.approvals');
-
-    Route::get('/admin/ledger', function () {
-        return Inertia::render('Admin/Ledger');
-    })->name('admin.ledger');
-});
-
-Route::middleware(['auth', 'verified', 'role:Anggota'])->group(function () {
-    Route::get('/member/dashboard', function () {
-        return Inertia::render('Member/Dashboard');
-    })->name('member.dashboard');
-
-    Route::get('/member/cart', function () {
-        return Inertia::render('Member/Cart');
-    })->name('member.cart');
-
-    Route::get('/member/finances', function () {
-        return Inertia::render('Member/Finances');
-    })->name('member.finances');
-
-    Route::get('/member/status', function () {
-        return Inertia::render('Member/Status');
-    })->name('member.status');
-});
+Route::prefix('member')
+    ->name('member.')
+    ->middleware(['auth', 'verified', 'role:Anggota'])
+    ->group(function () {
+        Route::get('/dashboard', MemberDashboardController::class)->name('dashboard');
+        Route::get('/cart', CartController::class)->name('cart');
+        Route::get('/finances', FinancesController::class)->name('finances');
+        Route::get('/status', StatusController::class)->name('status');
+    });
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
