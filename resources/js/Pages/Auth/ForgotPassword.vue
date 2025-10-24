@@ -1,10 +1,6 @@
 <script setup>
 import GuestLayout from "@/Layouts/GuestLayout.vue";
-import InputError from "@/Components/InputError.vue";
-import InputLabel from "@/Components/InputLabel.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import TextInput from "@/Components/TextInput.vue";
-import { Head, useForm } from "@inertiajs/vue3";
+import { Link, Head, useForm } from "@inertiajs/vue3";
 
 defineProps({
     status: {
@@ -26,43 +22,11 @@ const submit = () => {
         <Head title="Forgot Password" />
 
         <div class="tw-mb-4 tw-text-sm tw-text-gray-600">
-            Forgot your password? No problem. Just let us know your email
-            address and we will email you a password reset link that will allow
-            you to choose a new one.
+            Jika anda melupakan password anda, tidak masalah. Cukup datang ke
+            Kantor Koperasi Syariah POLBAN untuk melakukan reset password.
         </div>
-
-        <div
-            v-if="status"
-            class="tw-mb-4 tw-text-sm tw-font-medium tw-text-green-600"
+        <Link href="/" class="tw-rounded-md btn btn-primary"
+            >Back to Login</Link
         >
-            {{ status }}
-        </div>
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="tw-mt-1 tw-block tw-w-full"
-                    v-model="form.email"
-                    required
-                    autofocus
-                    autocomplete="username"
-                />
-
-                <InputError class="tw-mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="tw-mt-4 tw-flex tw-items-center tw-justify-end">
-                <PrimaryButton
-                    :class="{ 'tw-opacity-25': form.processing }"
-                    :disabled="form.processing"
-                >
-                    Email Password Reset Link
-                </PrimaryButton>
-            </div>
-        </form>
     </GuestLayout>
 </template>

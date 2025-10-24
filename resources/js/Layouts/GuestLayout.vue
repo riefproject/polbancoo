@@ -5,7 +5,7 @@ import { Link } from "@inertiajs/vue3";
 
 <template>
     <div
-        class="tw-flex tw-min-h-screen tw-flex-col tw-items-center tw-bg-gray-100 tw-pt-6 sm:tw-justify-center sm:tw-pt-0"
+        class="tw-flex tw-min-h-screen tw-flex-col tw-items-center tw-bg-gray-100 tw-pt-6 tw-justify-center sm:tw-pt-0"
     >
         <div>
             <Link href="/">
@@ -16,9 +16,13 @@ import { Link } from "@inertiajs/vue3";
         </div>
 
         <div
-            class="tw-mt-6 tw-w-full tw-overflow-hidden tw-bg-white tw-px-6 tw-py-4 tw-shadow-md sm:tw-max-w-md sm:tw-rounded-lg"
+            class="tw-container tw-flex tw-justify-center tw-align-center tw-my-5"
         >
-            <slot />
+            <div
+                class="tw-col tw-bg-white tw-p-8 tw-rounded-lg tw-shadow-md tw-w-[80%] sm:tw-w-96"
+            >
+                <slot />
+            </div>
         </div>
     </div>
 </template>
