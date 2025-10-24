@@ -25,7 +25,7 @@ const submit = () => {
             Jika anda melupakan password anda, tidak masalah. Cukup datang ke
             Kantor Koperasi Syariah POLBAN untuk melakukan reset password.
         </div>
-        <Link href="/" class="tw-rounded-md btn btn-primary"
+        <Link href="/login" class="tw-rounded-md btn btn-primary"
             >Back to Login</Link
         >
     </GuestLayout>

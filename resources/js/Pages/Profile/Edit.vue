@@ -48,12 +48,6 @@ defineProps({
                     <UpdatePasswordForm class="tw-max-w-xl" />
                 </div>
 
-                <div
-                    class="tw-bg-white tw-p-4 tw-shadow sm:tw-rounded-lg sm:tw-p-8"
-                >
-                    <DeleteUserForm class="tw-max-w-xl" />
-                </div>
-
                 <div class="tw-flex tw-justify-end">
                     <Link
                         :href="route('logout')"
