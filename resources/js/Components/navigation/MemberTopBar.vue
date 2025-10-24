@@ -27,6 +27,10 @@ const props = defineProps({
         type: String,
         default: "./cart",
     },
+    toProfile: {
+        type: String,
+        default: "../profile",
+    },
 });
 </script>
 
@@ -111,7 +115,7 @@ const props = defineProps({
 
                     <!-- Akun -->
                     <Link
-                        :href="toCart"
+                        :href="toProfile"
                         class="btn-icon tw-relative tw-h-12 tw-w-12 tw-flex-shrink-0"
                     >
                         <CircleUserRound

@@ -23,91 +23,31 @@ const submit = () => {
 <template>
     <GuestLayout>
         <Head title="Register" />
-
-        <form @submit.prevent="submit">
-            <div>
-                <InputLabel for="name" value="Name" />
-
-                <TextInput
-                    id="name"
-                    type="text"
-                    class="tw-mt-1 tw-block tw-w-full"
-                    v-model="form.name"
-                    required
-                    autofocus
-                    autocomplete="name"
-                />
-
-                <InputError class="tw-mt-2" :message="form.errors.name" />
+        <div
+            class="tw-container tw-flex tw-justify-center tw-align-center tw-my-5"
+        >
+            <div class="tw-text-lg tw-font-medium tw-text-gray-700">
+                Untuk melakukan pendaftaran akun, silakan datang ke Kantor
+                Koperasi Syariah POLBAN.
             </div>
-
-            <div class="tw-mt-4">
-                <InputLabel for="email" value="Email" />
-
-                <TextInput
-                    id="email"
-                    type="email"
-                    class="tw-mt-1 tw-block tw-w-full"
-                    v-model="form.email"
-                    required
-                    autocomplete="username"
-                />
-
-                <InputError class="tw-mt-2" :message="form.errors.email" />
-            </div>
-
-            <div class="tw-mt-4">
-                <InputLabel for="password" value="Password" />
-
-                <TextInput
-                    id="password"
-                    type="password"
-                    class="tw-mt-1 tw-block tw-w-full"
-                    v-model="form.password"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError class="tw-mt-2" :message="form.errors.password" />
-            </div>
-
-            <div class="tw-mt-4">
-                <InputLabel
-                    for="password_confirmation"
-                    value="Confirm Password"
-                />
-
-                <TextInput
-                    id="password_confirmation"
-                    type="password"
-                    class="tw-mt-1 tw-block tw-w-full"
-                    v-model="form.password_confirmation"
-                    required
-                    autocomplete="new-password"
-                />
-
-                <InputError
-                    class="tw-mt-2"
-                    :message="form.errors.password_confirmation"
-                />
-            </div>
-
-            <div class="tw-mt-4 tw-flex tw-items-center tw-justify-end">
-                <Link
-                    :href="route('login')"
-                    class="tw-rounded-md tw-text-sm tw-text-gray-600 tw-underline hover:tw-text-gray-900 focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-ring-offset-2"
+        </div>
+        <div class="tw-text-sm tw-text-gray-600">
+            Alamat: Jl. Gegerkalong Hilir, Desa Ciwaruga, Kecamatan Parongpong,
+            Kabupaten Bandung Barat, Jawa Barat 40559, Indonesia
+            <div
+                class="tw-mt-4 tw-flex tw-items-center tw-justify-between tw-gap-2"
+            >
+                <a href="/" class="tw-block tw-underline tw-text-primary"
+                    >&larr; Back</a
                 >
-                    Already registered?
-                </Link>
-
-                <PrimaryButton
-                    class="tw-ms-4"
-                    :class="{ 'tw-opacity-25': form.processing }"
-                    :disabled="form.processing"
+                <a
+                    href="https://maps.app.goo.gl/JLe3PV5aJUoiVXtE6"
+                    target="_blank"
+                    class="tw-py-1 tw-px-2 tw-bg-primary tw-text-white tw-rounded-md"
                 >
-                    Register
-                </PrimaryButton>
+                    Lihat di Google Maps
+                </a>
             </div>
-        </form>
+        </div>
     </GuestLayout>
 </template>
