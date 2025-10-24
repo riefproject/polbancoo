@@ -47,6 +47,8 @@ Route::prefix('member')
         Route::get('/cart', CartController::class)->name('cart');
         Route::get('/finances', FinancesController::class)->name('finances');
         Route::get('/status', StatusController::class)->name('status');
+        Route::get('/products', [\App\Http\Controllers\Member\ProductsController::class, 'index'])->name('products');
+        Route::get('/products/{product}', [\App\Http\Controllers\Member\ProductsController::class, 'show'])->name('products.show');
     });
 
 Route::middleware('auth')->group(function () {

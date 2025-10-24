@@ -22,8 +22,8 @@ const quickActions = computed(() => [
     {
         label: "Lihat Produk",
         icon: "ShoppingBag",
-        href: "/products",
-        comingSoon: true,
+        href: route("member.products"),
+        comingSoon: false,
     },
     {
         label: "Ajukan Murabahah",
