@@ -24,4 +24,10 @@ export function registerVant(app) {
     app.use(Tabbar);
     app.use(TabbarItem);
     app.use(NavBar);
+    app.use(Grid);
+    app.use(GridItem);
+    app.use(Image);
+    app.use(Field);
+    app.use(Radio);
+    app.use(RadioGroup);
 }
