@@ -10,6 +10,12 @@ import {
     Tabbar,
     TabbarItem,
     Tag,
+    Grid,
+    GridItem,
+    Image,
+    Field,
+    Radio,
+    RadioGroup,
 } from "vant";
 
 export function registerVant(app) {
