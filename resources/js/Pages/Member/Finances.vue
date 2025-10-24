@@ -1,6 +1,6 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head } from "@inertiajs/vue3";
 </script>
 
 <template>
@@ -8,11 +8,14 @@ import { Head } from '@inertiajs/vue3';
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800">
+            <h2
+                class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800"
+            >
                 Keuangan Saya
             </h2>
         </template>
 
+<<<<<<< HEAD
         <div class="tw-bg-gray-50 tw-p-5 tw-flex tw-flex-col tw-items-center tw-gap-5">
             <div class="tw-bg-gradient-to-r tw-from-orange-500 tw-to-orange-400 tw-rounded-2xl tw-w-full tw-text-white tw-p-6 tw-shadow-lg">
                 <h3 class="tw-text-lg tw-font-medium">Total Saldo</h3>
@@ -46,6 +49,10 @@ import { Head } from '@inertiajs/vue3';
                     </van-button>
                 </div>
             </div>
+=======
+        <div class="tw-space-y-4">
+            <h1 class="tw-text-lg">INI TAMPILAN KEUANGAN</h1>
+>>>>>>> 23296b8d815c80a91d980c270cf1a708fe0e8a43
         </div>
 
         <div class="tw-p-5 tw-flex tw-flex-col tw-items-center tw-gap-5">

@@ -1,43 +1,43 @@
 <script setup>
-import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from "vue";
 
 const props = defineProps({
     align: {
         type: String,
-        default: 'right',
+        default: "right",
     },
     width: {
         type: String,
-        default: '48',
+        default: "48",
     },
     contentClasses: {
         type: String,
-        default: 'tw-py-1 tw-bg-white',
+        default: "tw-py-1 tw-bg-white",
     },
 });
 
 const closeOnEscape = (e) => {
-    if (open.value && e.key === 'Escape') {
+    if (open.value && e.key === "Escape") {
         open.value = false;
     }
 };
 
-onMounted(() => document.addEventListener('keydown', closeOnEscape));
-onUnmounted(() => document.removeEventListener('keydown', closeOnEscape));
+onMounted(() => document.addEventListener("keydown", closeOnEscape));
+onUnmounted(() => document.removeEventListener("keydown", closeOnEscape));
 
 const widthClass = computed(() => {
     return {
-        48: 'tw-w-48',
+        48: "tw-w-48",
     }[props.width.toString()];
 });
 
 const alignmentClasses = computed(() => {
-    if (props.align === 'left') {
-        return 'ltr:tw-origin-top-left rtl:tw-origin-top-right tw-start-0';
-    } else if (props.align === 'right') {
-        return 'ltr:tw-origin-top-right rtl:tw-origin-top-left tw-end-0';
+    if (props.align === "left") {
+        return "ltr:tw-origin-top-left rtl:tw-origin-top-right tw-start-0";
+    } else if (props.align === "right") {
+        return "ltr:tw-origin-top-right rtl:tw-origin-top-left tw-end-0";
     } else {
-        return 'tw-origin-top';
+        return "tw-origin-top";
     }
 });
 

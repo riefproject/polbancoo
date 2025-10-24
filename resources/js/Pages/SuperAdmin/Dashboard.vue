@@ -1,7 +1,7 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head, usePage } from "@inertiajs/vue3";
+import { computed } from "vue";
 
 const page = usePage();
 const user = computed(() => page.props.auth.user);
@@ -12,13 +12,17 @@ const user = computed(() => page.props.auth.user);
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800">
+            <h2
+                class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800"
+            >
                 Kelola Admin
             </h2>
         </template>
 
         <div class="tw-py-12">
-            <div class="tw-mx-auto tw-max-w-5xl tw-space-y-6 sm:tw-px-6 lg:tw-px-8">
+            <div
+                class="tw-mx-auto tw-max-w-5xl tw-space-y-6 sm:tw-px-6 lg:tw-px-8"
+            >
                 <van-card
                     class="tw-rounded-xl tw-shadow-sm"
                     :title="`Selamat datang, ${user?.name ?? ''}`"
