@@ -4,6 +4,7 @@ import { Head } from "@inertiajs/vue3";
 
 defineProps({
   applications: Array,
+  statusSummary: Object,
 });
 </script>
 
@@ -12,16 +13,36 @@ defineProps({
 
   <AuthenticatedLayout>
     <template #header>
-      <h2
-        class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800"
-      >
+      <h2 class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800">
         Status Pengajuan Pembiayaan
       </h2>
     </template>
 
-    <!-- Wrapper utama -->
+    <!-- Ringkasan Status -->
     <div
-      class="tw-p-6 tw-bg-gradient-to-r tw-from-blue-900 tw-to-orange-500 tw-rounded-2xl tw-text-white tw-shadow-xl tw-mt-5"
+      class="tw-my-6 tw-bg-white tw-rounded-2xl tw-shadow-md tw-py-4 tw-px-6 tw-border tw-border-slate-200"
+    >
+      <div
+        class="tw-flex tw-flex-wrap tw-justify-center tw-gap-x-12 tw-gap-y-4"
+      >
+        <div
+          v-for="(count, status) in statusSummary"
+          :key="status"
+          class="tw-text-center tw-space-y-2"
+        >
+          <div class="tw-text-orange-500 tw-font-semibold tw-text-base">
+            {{ status }}
+          </div>
+          <div class="tw-text-blue-900 tw-font-bold tw-text-2xl">
+            {{ count }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daftar Pengajuan -->
+    <div
+      class="tw-p-6 tw-bg-gradient-to-r tw-from-blue-900 tw-to-orange-500 tw-rounded-2xl tw-text-white tw-shadow-xl"
     >
       <h3 class="tw-text-2xl tw-font-bold tw-mb-6 tw-text-center">
         Daftar Pengajuan Anda
