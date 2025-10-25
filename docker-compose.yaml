@@ -5,12 +5,12 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     ports:
-      - 9000:9000
+      # - 9000:9000
     depends_on:
       - db
     env_file:
-      - .env.example
-      # - .env.production
+      # - .env.example
+      - .env.production
     volumes:
       - storage:/usr/share/nginx/html/storage:rw
       - public:/usr/share/nginx/html/public:rw
@@ -33,8 +33,8 @@ services:
   nginx:
     image: nginx:1-alpine
     ports:
-      - 80:80
-      - 443:443
+      # - 80:80
+      # - 443:443 
     volumes:
       - ./docker/nginx/nginx.conf:/etc/nginx/templates/default.conf.template
       - storage:/usr/share/nginx/html/storage:rw
@@ -55,7 +55,7 @@ services:
     image: bitnami/redis
     platform: linux/amd64
     ports:
-      - 6379:6379
+      # - 6379:6379
     restart: always
     volumes:
       - redis-data:/bitnami/redis/data
