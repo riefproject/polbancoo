@@ -62,7 +62,7 @@ const superAdminLinks = [
         name: "superadmin.dashboard",
         label: "Kelola Admin",
         icon: "manager-o",
-        patterns: ["superadmin.dashboard"],
+        patterns: ["superadmin.dashboard", "superadmin.admins.index"],
     },
     {
         name: "profile.edit",

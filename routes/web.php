@@ -26,6 +26,7 @@ Route::prefix('superadmin')
     ->middleware(['auth', 'verified', 'role:Super Admin'])
     ->group(function () {
         Route::get('/dashboard', SuperAdminDashboardController::class)->name('dashboard');
+        Route::resource('admins', \App\Http\Controllers\SuperAdmin\AdminController::class);
     });
 
 Route::prefix('admin')

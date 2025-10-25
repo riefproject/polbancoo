@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, usePage } from "@inertiajs/vue3";
+import { Head, usePage, Link } from "@inertiajs/vue3";
 import { computed } from "vue";
 
 const page = usePage();
@@ -33,9 +33,11 @@ const user = computed(() => page.props.auth.user);
                             pengurus koperasi dari satu tempat.
                         </p>
                         <div class="tw-flex tw-flex-wrap tw-gap-3">
-                            <van-button type="primary" icon="manager-o">
-                                Kelola Admin
-                            </van-button>
+                            <Link :href="route('superadmin.admins.index')">
+                                <van-button type="primary" icon="manager-o">
+                                    Kelola Admin
+                                </van-button>
+                            </Link>
                             <van-button type="default" icon="setting-o">
                                 Pengaturan Sistem
                             </van-button>
