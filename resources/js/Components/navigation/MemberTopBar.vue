@@ -1,5 +1,6 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
+import { ref } from "vue";
 import {
     CircleUserRound,
     ShoppingCart,
@@ -32,6 +33,17 @@ const props = defineProps({
         default: "../profile",
     },
 });
+
+const search = ref("");
+
+const handleSearch = () => {
+    if (search.value.trim() !== "") {
+        router.get(route("member.products"), { q: search.value });
+    } else {
+        router.get(route("member.products"));
+    }
+};
+
 </script>
 
 <template>
@@ -64,6 +76,8 @@ const props = defineProps({
                                 />
                             </span>
                             <input
+                                v-model="search"
+                                @keyup.enter="handleSearch"
                                 type="search"
                                 name="q"
                                 placeholder="Cari produk atau kebutuhan Syariah..."

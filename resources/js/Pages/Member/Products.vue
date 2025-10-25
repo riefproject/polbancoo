@@ -1,14 +1,24 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
+import { ref, watch } from "vue";
 
-defineProps({
+const props = defineProps({
   products: Array,
+  search: String,
 });
+
+// input pencarian
+const search = ref(props.search || "");
+
+// fungsi buat pencarian produk
+const searchProducts = () => {
+  router.get(route("member.products"), { q: search.value }, { preserveState: true });
+};
 
 // fungsi buat pindah ke halaman detail
 const goToDetail = (product) => {
-  router.visit(route("member.products.show", product.id));
+  router.visit(route("member.products.show", product.slug));
 };
 </script>
 
@@ -22,41 +32,43 @@ const goToDetail = (product) => {
       </h2>
     </template>
 
-    <!-- Grid Produk -->
+  <!-- Grid Produk -->
+  <div
+    class="tw-px-2 tw-py-4
+          tw-grid tw-grid-cols-2 sm:tw-grid-cols-2 lg:tw-grid-cols-3
+          tw-gap-3 sm:tw-gap-4 lg:tw-gap-6"
+  >
     <div
-      class="tw-p-6 tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-6"
+      v-for="product in products"
+      :key="product.id"
+      @click="goToDetail(product)"
+      class="tw-bg-white tw-rounded-xl tw-overflow-hidden tw-shadow hover:tw-shadow-lg hover:tw-scale-[1.02] tw-transition tw-cursor-pointer"
     >
-      <div
-        v-for="product in products"
-        :key="product.id"
-        @click="goToDetail(product)"
-        class="tw-bg-white tw-rounded-xl tw-overflow-hidden tw-shadow hover:tw-shadow-lg hover:tw-scale-[1.02] tw-transition tw-cursor-pointer"
-      >
-        <img
-          :src="product.image_url || '/img/no-image.png'"
-          alt="Product Image"
-          class="tw-w-full tw-h-48 tw-object-cover"
-        />
+      <img
+        :src="product.image_url || '/img/no-image.png'"
+        alt="Product Image"
+        class="tw-w-full tw-h-40 sm:tw-h-48 tw-object-cover"
+      />
 
-        <div class="tw-p-4">
-          <h3 class="tw-text-lg tw-font-semibold tw-text-blue-900">
-            {{ product.name }}
-          </h3>
+      <div class="tw-p-3 sm:tw-p-4">
+        <h3 class="tw-text-sm sm:tw-text-base tw-font-semibold tw-text-blue-900 tw-leading-tight">
+          {{ product.name }}
+        </h3>
 
-          <p class="tw-text-sm tw-text-gray-600 tw-mt-1">
-            {{ product.category?.name ?? "Tanpa Kategori" }}
-          </p>
+        <p class="tw-text-xs sm:tw-text-sm tw-text-gray-600 tw-mt-1">
+          {{ product.category?.name ?? "Tanpa Kategori" }}
+        </p>
 
-          <p class="tw-text-orange-600 tw-font-bold tw-mt-2">
-            Rp {{ Number(product.cash_price).toLocaleString("id-ID") }}
-          </p>
+        <p class="tw-text-orange-600 tw-font-bold tw-mt-1 sm:tw-mt-2">
+          Rp {{ Number(product.cash_price).toLocaleString("id-ID") }}
+        </p>
 
-          <p class="tw-text-gray-700 tw-text-sm tw-mt-3 tw-line-clamp-2">
-            {{ product.description }}
-          </p>
-        </div>
+        <p class="tw-text-gray-700 tw-text-xs sm:tw-text-sm tw-mt-2 tw-line-clamp-2">
+          {{ product.description }}
+        </p>
       </div>
     </div>
+  </div>
 
     <!-- Jika kosong -->
     <div

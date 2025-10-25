@@ -1,5 +1,6 @@
 <script setup>
-import { Link } from "@inertiajs/vue3";
+import { Link, router } from "@inertiajs/vue3";
+import { ref } from "vue";
 import { ShoppingCart } from "lucide-vue-next";
 
 const props = defineProps({
@@ -8,6 +9,18 @@ const props = defineProps({
         default: "#",
     },
 });
+
+// state pencarian
+const search = ref("");
+
+// fungsi untuk handle pencarian
+const handleSearch = () => {
+    if (search.value.trim() !== "") {
+        router.get(route("member.products"), { q: search.value });
+    } else {
+        router.get(route("member.products"));
+    }
+};
 </script>
 
 <template>
@@ -15,6 +28,7 @@ const props = defineProps({
         class="tw-sticky tw-top-0 tw-z-40 tw-border-b tw-border-slate-200 tw-bg-white/95 tw-backdrop-blur tw-px-4 tw-py-3 md:tw-hidden"
     >
         <div class="tw-flex tw-items-center tw-gap-3">
+            <!-- Search Bar -->
             <label class="tw-relative tw-flex-1">
                 <span class="tw-sr-only">Cari produk</span>
                 <span
@@ -26,6 +40,8 @@ const props = defineProps({
                     />
                 </span>
                 <input
+                    v-model="search"
+                    @keyup.enter="handleSearch"
                     type="search"
                     name="q"
                     placeholder="Cari produk atau kebutuhan Syariah..."
@@ -33,6 +49,7 @@ const props = defineProps({
                 />
             </label>
 
+            <!-- Icon keranjang -->
             <Link
                 :href="cartRoute"
                 class="btn-icon tw-relative tw-h-12 tw-w-12 tw-flex-shrink-0"
