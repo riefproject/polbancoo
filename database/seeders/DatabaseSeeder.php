@@ -16,6 +16,7 @@ use App\Models\User;
 use Faker\Generator;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\App;
+use Ramsey\Collection\Collection;
 
 class DatabaseSeeder extends Seeder
 {
@@ -101,14 +102,19 @@ class DatabaseSeeder extends Seeder
             foreach ($orders as $order) {
                 $itemCount = $faker->numberBetween(1, 3);
                 $orderItems = collect();
+                $productToBuys = collect();
+                for($i = 0; $i < $itemCount; $i++) {
+                    $productToBuys->push($products->random());
+                }
+                $productToBuys = $productToBuys->unique("id");
 
-                for ($i = 0; $i < $itemCount; $i++) {
-                    $product = $products->random();
+                for ($i = 0; $i < $productToBuys->count(); $i++) {
+                    $product = $products->get($i);
+
                     $quantity = $faker->numberBetween(1, 3);
                     $price = $order->payment_method === 'Murabahah'
                         ? round($product->cash_price * 1.1, 2)
                         : $product->cash_price;
-
                     $orderItems->push(
                         OrderItem::factory()
                             ->state([
