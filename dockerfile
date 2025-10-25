@@ -1,69 +1,46 @@
-# ============================================
-# Stage 1: Build frontend assets (Vite + Vue)
-# ============================================
-FROM node:18-alpine AS node-builder
-WORKDIR /app
+FROM php:8.4-fpm
 
-# Copy only package files first for caching
-COPY package*.json ./
-RUN npm ci --silent
-
-# Copy all files and build assets
-COPY . .
-RUN npm run build
-
-
-# ============================================
-# Stage 2: Install PHP dependencies (Composer)
-# ============================================
-FROM composer:latest AS vendor
-WORKDIR /app
-
-# Copy only composer files for caching
-COPY composer.json composer.lock ./
-RUN composer install --no-dev --optimize-autoloader --no-interaction --no-progress --no-scripts
-
-
-# ============================================
-# Stage 3: Final PHP 8.3 FPM production image
-# ============================================
-FROM php:8.3-fpm-alpine
-
-# Install required system dependencies + PHP extensions
-RUN apk add --no-cache \
-    bash \
-    icu-dev \
+# Update package list and install dependencies
+RUN apt-get update && apt-get install -y \
     libzip-dev \
-    zip \
-    oniguruma-dev \
-    postgresql-dev
+    libpng-dev \
+    postgresql-client \
+    libpq-dev \
+    nodejs \
+    npm \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-RUN docker-php-ext-configure intl
-RUN docker-php-ext-install intl pdo pdo_pgsql mbstring zip opcache bcmath
+# Install Composer
+COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-# Set working directory
-WORKDIR /var/www/html
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
-# Copy vendor files from composer stage
-COPY --from=vendor /app/vendor ./vendor
+# Install required packages
+RUN docker-php-ext-install pdo pgsql pdo_pgsql gd bcmath zip \
+    && pecl install redis \
+    && docker-php-ext-enable redis
 
-# Copy Vite-built assets from node stage
-COPY --from=node-builder /app/public/build ./public/build
+WORKDIR /usr/share/nginx/html/
 
-# Copy the full Laravel application
-COPY . .
+# Copy the codebase
+COPY . ./
 
-# ✅ Ensure correct storage & cache permissions (AFTER copying everything)
-RUN chown -R www-data:www-data /var/www storage bootstrap/cache \
-    && chmod -R 755 storage /var/www bootstrap/cache
+# Run composer install for production and give permissions
+RUN sed 's_@php artisan package:discover_/bin/true_;' -i composer.json \
+    && composer install --ignore-platform-req=php --no-dev --optimize-autoloader \
+    && composer clear-cache \
+    && php artisan package:discover --ansi \
+    && chmod -R 775 storage \
+    && chown -R www-data:www-data storage \
+    && mkdir -p storage/framework/sessions storage/framework/views storage/framework/cache
 
-# ✅ Run optional optimization commands only AFTER env is loaded (safe mode)
-# You may uncomment these later for full production caching
-# RUN php artisan config:cache || true \
-#     && php artisan route:cache || true \
-#     && php artisan view:cache || true
+# Copy entrypoint
+COPY ./scripts/php-fpm-entrypoint /usr/local/bin/php-entrypoint
 
-# Expose PHP-FPM port
-EXPOSE 9000
+# Give permisisons to everything in bin/
+RUN chmod a+x /usr/local/bin/*
+
+ENTRYPOINT ["/usr/local/bin/php-entrypoint"]
 
 CMD ["php-fpm"]
