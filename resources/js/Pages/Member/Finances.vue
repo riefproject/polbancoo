@@ -3,6 +3,13 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head } from "@inertiajs/vue3";
 import { ref, Text } from "vue";
 
+// Ambil Data Dari Controller //
+const props = defineProps({
+    totalSaldo: Number,
+    simpanan: Object,
+    lastUpdate: String
+});
+
 const isModalMandatoryOpen = ref(false); // Status Modal Simpanan Pokok //
 const isModalVoluntaryOpen = ref(false); // Status Modal Simpanan Sukarela //
 </script>
@@ -23,19 +30,19 @@ const isModalVoluntaryOpen = ref(false); // Status Modal Simpanan Sukarela //
         <div class="tw-bg-gray-50 tw-p-5 tw-flex tw-flex-col tw-items-center tw-gap-5">
             <div class="tw-bg-gradient-to-r tw-from-orange-500 tw-to-orange-400 tw-rounded-2xl tw-w-full tw-text-white tw-p-6 tw-shadow-lg">
                 <h3 class="tw-text-lg tw-font-medium">Total Saldo</h3>
-                <p class="tw-text-3xl tw-font-bold tw-mt-2">Rp 12.500.000</p>
-                <p class="tw-text-sm tw-opacity-80 tw-mt-1">Update: 22 Okt 2025</p>
+                <p class="tw-text-3xl tw-font-bold tw-mt-2">Rp {{ totalSaldo.toLocaleString("id-ID") }}</p>
+                <p class="tw-text-sm tw-opacity-80 tw-mt-1">Update: {{lastUpdate}}</p>
             </div>
             <div class="tw-grid tw-grid-cols-1 tw-gap-4 tw-w-full">
                 <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-4 tw-flex tw-justify-between tw-items-center">
                 <span class="tw-text-gray-700 tw-font-medium">Simpanan Wajib</span>
-                <span class="tw-text-orange-600 tw-font-semibold">Rp 5.000.000</span>
+                <span class="tw-text-orange-600 tw-font-semibold">Rp {{ props.simpanan.wajib.toLocaleString("id-ID") }}</span>
                 </div>
                 
                 <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-4 tw-flex tw-flex-col tw-gap-3">
                     <div class="tw-flex tw-justify-between tw-items-center">
                     <span class="tw-text-gray-700 tw-font-medium">Simpanan Pokok</span>
-                    <span class="tw-text-orange-600 tw-font-semibold">Rp 6.000.000</span>
+                    <span class="tw-text-orange-600 tw-font-semibold">Rp {{ props.simpanan.pokok.toLocaleString("id-ID") }}</span>
                     </div>
                     <button @click="isModalMandatoryOpen = true" round class="tw-font-semibold tw-py-2 tw-shadow-md hover:tw-brightness-110 tw-transition">
                     <van-icon name="add-o" class="tw-mr-2" />
@@ -89,7 +96,7 @@ const isModalVoluntaryOpen = ref(false); // Status Modal Simpanan Sukarela //
                 <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-4 tw-flex tw-flex-col tw-gap-3">
                     <div class="tw-flex tw-justify-between tw-items-center">
                     <span class="tw-text-gray-700 tw-font-medium">Simpanan Sukarela</span>
-                    <span class="tw-text-orange-600 tw-font-semibold">Rp 1.500.000</span>
+                    <span class="tw-text-orange-600 tw-font-semibold">Rp {{ props.simpanan.sukarela.toLocaleString("id-ID") }}</span>
                     </div>
                     <button @click="isModalVoluntaryOpen = true" round class="tw-font-semibold tw-py-2 tw-shadow-md hover:tw-brightness-110 tw-transition">
                     <van-icon name="add-o" class="tw-mr-2" />
