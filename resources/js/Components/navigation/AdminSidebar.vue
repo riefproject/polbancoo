@@ -1,7 +1,7 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
 
-const props = defineProps({
+defineProps({
     links: {
         type: Array,
         default: () => [],
@@ -14,15 +14,27 @@ const props = defineProps({
         type: Object,
         default: null,
     },
+    showOnMobile: {
+        type: Boolean,
+        default: false,
+    },
 });
+
+const emit = defineEmits(["navigate"]);
 </script>
 
 <template>
     <aside
-        class="tw-hidden tw-w-64 tw-border-r tw-border-slate-200 tw-bg-white md:tw-block"
+        :class="[
+            'tw-w-64 tw-border-r tw-border-slate-200 tw-bg-white',
+            showOnMobile ? 'tw-block' : 'tw-hidden md:tw-block',
+        ]"
     >
         <div
-            class="tw-sticky tw-top-0 tw-flex tw-h-screen tw-flex-col tw-bg-white/95 tw-backdrop-blur"
+            :class="[
+                'tw-flex tw-flex-col tw-bg-white/95 tw-backdrop-blur',
+                showOnMobile ? 'tw-h-full' : 'tw-sticky tw-top-0 tw-h-screen',
+            ]"
         >
             <div
                 class="tw-border-b tw-border-slate-200 tw-px-6 tw-pb-4 tw-pt-6"
@@ -48,6 +60,7 @@ const props = defineProps({
                             ? 'bg-primary tw-text-white tw-shadow-sm'
                             : 'tw-text-slate-600 hover:bg-secondary-light',
                     ]"
+                    @click="emit('navigate')"
                 >
                     <van-icon :name="link.icon" class="tw-text-lg" />
                     <span>{{ link.label }}</span>

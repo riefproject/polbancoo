@@ -76,25 +76,28 @@ const memberLinks = [
     {
         name: "member.dashboard",
         label: "Home",
-        icon: "home-o",
+        icon: "wap-home-o",
         patterns: ["member.dashboard"],
     },
     {
         name: "member.finances",
         label: "Keuangan",
-        icon: "balance-o",
+        icon: "balance-list-o",
+        iconFilled: "balance-list",
         patterns: ["member.finances"],
     },
     {
         name: "member.status",
         label: "Status",
         icon: "todo-list-o",
+        iconFilled: "todo-list",
         patterns: ["member.status"],
     },
     {
         name: "profile.edit",
         label: "Profile",
-        icon: "user-circle-o",
+        icon: "user-o",
+        iconFilled: "user",
         patterns: ["profile.*"],
     },
 ];
@@ -109,11 +112,11 @@ const currentSidebarLinks = computed(() =>
         ...link,
         href: route(link.name),
         active: isActive(link.patterns ?? [link.name]),
-    })),
+    }))
 );
 
 const sidebarTitle = computed(() =>
-    isSuperAdmin.value ? "KopSy Super Admin" : "KopSy Admin",
+    isSuperAdmin.value ? "KopSy Super Admin" : "KopSy Admin"
 );
 
 const currentMemberLinks = computed(() =>
@@ -121,7 +124,12 @@ const currentMemberLinks = computed(() =>
         ...link,
         href: route(link.name),
         active: isActive(link.patterns ?? [link.name]),
-    })),
+        iconFilled:
+            link.iconFilled ??
+            (typeof link.icon === "string" && link.icon.endsWith("-o")
+                ? link.icon.slice(0, -2)
+                : link.icon),
+    }))
 );
 
 const memberActiveIndex = computed(() => {
@@ -142,7 +150,7 @@ watch(
     () => page.url,
     () => {
         sidebarOpen.value = false;
-    },
+    }
 );
 </script>
 
@@ -159,6 +167,7 @@ watch(
                 <AdminMobileNav
                     v-model="sidebarOpen"
                     :links="currentSidebarLinks"
+                    :title="sidebarTitle"
                     :user="user"
                 />
 

@@ -1,0 +1,8 @@
+*.md
+*.*
+!/controller/
+!/model/
+!/views/
+!/**/*.md
+!.gitignore
+!app.md

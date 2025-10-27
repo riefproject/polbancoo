@@ -16,6 +16,22 @@ const handleChange = (index) => {
     emit("update:modelValue", index);
     emit("navigate", index);
 };
+
+const resolveIcon = (link, active) => {
+    if (!active) {
+        return link.icon;
+    }
+
+    if (link.iconFilled) {
+        return link.iconFilled;
+    }
+
+    if (typeof link.icon === "string" && link.icon.endsWith("-o")) {
+        return link.icon.slice(0, -2);
+    }
+
+    return link.icon;
+};
 </script>
 
 <template>
@@ -31,8 +47,14 @@ const handleChange = (index) => {
         <van-tabbar-item
             v-for="(link, index) in links"
             :key="link.name"
-            :icon="link.icon"
+            :icon="resolveIcon(link, index === modelValue)"
         >
+            <template #icon="{ active }">
+                <van-icon
+                    :name="resolveIcon(link, active)"
+                    class="tw-text-xl"
+                />
+            </template>
             {{ link.label }}
         </van-tabbar-item>
     </van-tabbar>

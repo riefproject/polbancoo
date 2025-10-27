@@ -1,6 +1,9 @@
 <script setup>
 import { computed } from "vue";
 import { Link } from "@inertiajs/vue3";
+import { TextAlignStart } from "lucide-vue-next";
+import AdminSidebar from "./AdminSidebar.vue";
+
 const props = defineProps({
     modelValue: {
         type: Boolean,
@@ -9,6 +12,10 @@ const props = defineProps({
     links: {
         type: Array,
         default: () => [],
+    },
+    title: {
+        type: String,
+        default: "KopSy Admin",
     },
     user: {
         type: Object,
@@ -23,6 +30,7 @@ const drawerVisible = computed({
     set: (value) => emit("update:modelValue", value),
 });
 
+const toggleDrawer = () => emit("update:modelValue", !props.modelValue);
 const closeDrawer = () => emit("update:modelValue", false);
 </script>
 
@@ -34,9 +42,28 @@ const closeDrawer = () => emit("update:modelValue", false);
             <button
                 type="button"
                 class="btn-icon"
-                @click="drawerVisible = true"
+                aria-label="Toggle navigation"
+                @click="toggleDrawer"
             >
-                <van-icon name="menu" class="tw-text-2xl" />
+                <template v-if="drawerVisible">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        class="tw-h-6 tw-w-6 tw-text-slate-600"
+                        aria-hidden="true"
+                    >
+                        <path
+                            fill="currentColor"
+                            d="m6.4 6.4 11.2 11.2m0-11.2L6.4 17.6"
+                            stroke="currentColor"
+                            stroke-width="1.5"
+                            stroke-linecap="round"
+                        />
+                    </svg>
+                </template>
+                <template v-else>
+                    <TextAlignStart class="tw-text-base" />
+                </template>
             </button>
 
             <div class="tw-text-sm tw-font-semibold tw-text-slate-700">
@@ -47,52 +74,28 @@ const closeDrawer = () => emit("update:modelValue", false);
                 <van-icon name="user-o" class="tw-text-xl" />
             </Link>
         </div>
-
-        <van-popup
-            v-model:show="drawerVisible"
-            position="left"
-            class="!tw-h-full !tw-w-64 tw-p-0 md:!tw-hidden"
-        >
-            <div
-                class="tw-flex tw-h-full tw-flex-col tw-border-r tw-border-slate-200 tw-bg-white"
-            >
-                <div
-                    class="tw-flex tw-items-center tw-justify-between tw-border-b tw-border-slate-200 tw-px-5 tw-pb-3 tw-pt-6"
-                >
-                    <span class="tw-text-lg tw-font-semibold text-primary">
-                        Navigasi
-                    </span>
-                    <button type="button" class="btn-icon" @click="closeDrawer">
-                        <van-icon name="close" class="tw-text-xl" />
-                    </button>
-                </div>
-
-                <nav
-                    class="tw-flex-1 tw-space-y-1 tw-overflow-y-auto tw-px-3 tw-pb-6 tw-pt-4"
-                >
-                    <Link
-                        v-for="link in links"
-                        :key="link.name"
-                        :href="link.href"
-                        class="tw-flex tw-items-center tw-gap-3 tw-rounded-lg tw-px-3 tw-py-2 tw-text-base tw-font-medium tw-transition"
-                        :class="[
-                            link.active
-                                ? 'bg-primary tw-text-white tw-shadow-sm'
-                                : 'tw-text-slate-600 hover:bg-secondary-light',
-                        ]"
-                        @click="closeDrawer"
-                    >
-                        <van-icon :name="link.icon" class="tw-text-lg" />
-                        <span>{{ link.label }}</span>
-                    </Link>
-                </nav>
-
-                <div
-                    class="tw-border-t tw-border-slate-200 tw-px-3 tw-py-4 tw-text-xs tw-text-slate-400"
-                >
-                    © KopSy Campus
-                </div>
-            </div>
-        </van-popup>
     </header>
+
+    <div
+        class="tw-fixed tw-inset-0 tw-z-30 tw-bg-black/40 tw-transition-opacity tw-duration-300 md:tw-hidden"
+        :class="
+            drawerVisible
+                ? 'tw-opacity-100'
+                : 'tw-pointer-events-none tw-opacity-0'
+        "
+        @click="closeDrawer"
+    />
+
+    <div
+        class="tw-fixed tw-inset-y-0 tw-left-0 tw-z-40 tw-w-64 tw-bg-white tw-shadow-xl tw-transition-all tw-duration-300 tw-ease-in-out md:tw-hidden"
+        :style="{ left: drawerVisible ? '0' : '-100%' }"
+    >
+        <AdminSidebar
+            :links="links"
+            :title="title"
+            :user="user"
+            :show-on-mobile="true"
+            @navigate="closeDrawer"
+        />
+    </div>
 </template>
