@@ -1,17 +1,59 @@
 <script setup>
-import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head } from "@inertiajs/vue3";
-import { ref, Text } from "vue";
+    import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+    import { Head, router } from "@inertiajs/vue3";
+    import { ref, computed } from "vue";
 
-// Ambil Data Dari Controller //
-const props = defineProps({
+    const props = defineProps({
     totalSaldo: Number,
     simpanan: Object,
-    lastUpdate: String
-});
+    lastUpdate: String,
+    });
 
-const isModalMandatoryOpen = ref(false); // Status Modal Simpanan Pokok //
-const isModalVoluntaryOpen = ref(false); // Status Modal Simpanan Sukarela //
+    const isModalOpen = ref(false);
+    const modalType = ref(""); // Mandatory atau Voluntary //
+    const nominal = ref("");
+    const catatan = ref("");
+    const file = ref(null);
+
+    function openModal(type) {
+        modalType.value = type;
+        isModalOpen.value = true;
+    }
+
+    function closeModal() {
+        isModalOpen.value = false;
+        nominal.value = "";
+        catatan.value = "";
+    }
+
+    const modalLabel = computed(() => {
+        if (modalType.value === "Mandatory") return "Simpanan Wajib";
+        if (modalType.value === "Voluntary") return "Simpanan Sukarela";
+        return "";
+    });
+
+    function simpanData() {
+        if (!nominal.value) {
+            alert("Nominal tidak boleh kosong!");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("type", modalType.value);
+        formData.append("amount", nominal.value);
+        formData.append("description", catatan.value);
+
+        router.post("/member/finances/store", formData, {
+            onSuccess: () => {
+            alert("Transaksi berhasil dikirim!");
+            closeModal();
+            },
+            onError: (errors) => {
+            console.error(errors);
+            alert("Terjadi kesalahan saat menyimpan data.");
+            },
+        });
+    }
 </script>
 
 <template>
@@ -19,135 +61,112 @@ const isModalVoluntaryOpen = ref(false); // Status Modal Simpanan Sukarela //
 
     <AuthenticatedLayout>
         <template #header>
-            <h2
-                class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800"
-            >
-                Keuangan Saya
-            </h2>
+        <h2 class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800">
+            Keuangan Saya
+        </h2>
         </template>
 
-        <!-- Belum menggunakan data dari database -->
+        <!-- Total Saldo -->
         <div class="tw-bg-gray-50 tw-p-5 tw-flex tw-flex-col tw-items-center tw-gap-5">
-            <div class="tw-bg-gradient-to-r tw-from-orange-500 tw-to-orange-400 tw-rounded-2xl tw-w-full tw-text-white tw-p-6 tw-shadow-lg">
+            <div class="tw-bg-gradient-to-r tw-from-orange-500 tw-to-orange-400 tw-rounded-2xl tw-w-full tw-text-white tw-p-6 tw-shadow-lg" >
                 <h3 class="tw-text-lg tw-font-medium">Total Saldo</h3>
-                <p class="tw-text-3xl tw-font-bold tw-mt-2">Rp {{ totalSaldo.toLocaleString("id-ID") }}</p>
-                <p class="tw-text-sm tw-opacity-80 tw-mt-1">Update: {{lastUpdate}}</p>
+                <p class="tw-text-3xl tw-font-bold tw-mt-2">
+                Rp {{ totalSaldo.toLocaleString("id-ID") }}
+                </p>
+                <p class="tw-text-sm tw-opacity-80 tw-mt-1">Update: {{ lastUpdate }}</p>
             </div>
+
+            <!-- Simpanan -->
             <div class="tw-grid tw-grid-cols-1 tw-gap-4 tw-w-full">
-                <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-4 tw-flex tw-justify-between tw-items-center">
-                <span class="tw-text-gray-700 tw-font-medium">Simpanan Wajib</span>
-                <span class="tw-text-orange-600 tw-font-semibold">Rp {{ props.simpanan.wajib.toLocaleString("id-ID") }}</span>
-                </div>
-                
-                <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-4 tw-flex tw-flex-col tw-gap-3">
-                    <div class="tw-flex tw-justify-between tw-items-center">
-                    <span class="tw-text-gray-700 tw-font-medium">Simpanan Pokok</span>
-                    <span class="tw-text-orange-600 tw-font-semibold">Rp {{ props.simpanan.pokok.toLocaleString("id-ID") }}</span>
+                <!-- Simpanan Pokok -->
+                <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-4 tw-flex tw-justify-between tw-items-center" >
+                    <div>
+                        <span class="tw-text-gray-700 tw-font-medium">Simpanan Pokok</span>
                     </div>
-                    <button @click="isModalMandatoryOpen = true" round class="tw-font-semibold tw-py-2 tw-shadow-md hover:tw-brightness-110 tw-transition">
-                    <van-icon name="add-o" class="tw-mr-2" />
-                    Tambah Simpanan Pokok
-                    </button>
-                    <Teleport to="body"> <!-- Model -->
-                        <div
-                            v-if="isModalMandatoryOpen"
-                            class="tw-fixed tw-inset-0 tw-bg-black/50 tw-flex tw-items-center tw-justify-center tw-z-[9999]"
-                        >
-                            <div class="tw-bg-white tw-rounded-xl tw-shadow-xl tw-w-96 tw-p-6 tw-text-center">
-                                <h3 class="tw-text-lg tw-font-semibold tw-mb-4">Tambah Simpanan Pokok</h3>
-                                <div class="tw-text-left">
-                                <label class="tw-block tw-text-gray-700 tw-font-medium tw-mb-1">Nominal Simpanan</label> <!-- Input Nominal -->
-                                <input
-                                    v-model="nominal" type="number" placeholder="Masukkan nominal"
-                                    class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-outline-none"
-                                />
-                                </div>
-
-                                <div class="tw-text-left">
-                                <label class="tw-block tw-mt-5 tw-text-gray-700 tw-font-medium tw-mb-1">Catatan</label> <!-- Input Catatan -->
-                                <input
-                                    v-model="catatan" type="text" placeholder="Tambahkan catatan (opsional)"
-                                    class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-outline-none"
-                                />
-                                </div>
-
-                                <div class="tw-text-left">
-                                <label class="tw-block tw-mt-5 tw-text-gray-700 tw-font-medium tw-mb-1">Bukti Pembayaran</label> <!-- Input Bukti Transfer -->
-                                <!-- Inputan File Gambar Masih Dalam Tahap Uji Coba -->
-                                <input type="file" accept="image/*" @change="handleFileChange" class="tw-mb-4 tw-w-full">
-                                </div>
-
-                                <div class="tw-flex tw-justify-center tw-gap-4">
-                                    <button
-                                    @click="isModalMandatoryOpen = false" class="tw-bg-red-600 tw-text-white tw-rounded-lg tw-mt-5 tw-px-4 tw-py-2 hover:tw-brightness-110"
-                                    > Batal
-                                    </button>
-                                    <!-- Button simpan belom bisa dipake -->
-                                    <button
-                                    @click="simpanData" class="tw-bg-green-600 tw-text-white tw-rounded-lg tw-mt-5 tw-px-4 tw-py-2 hover:tw-brightness-110"
-                                    > Simpan
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </Teleport>
+                    <div class="tw-text-right">
+                        <p class="tw-text-orange-600 tw-font-semibold">
+                        Rp {{ props.simpanan.pokok.toLocaleString("id-ID") }}
+                        </p>
+                    </div>
                 </div>
 
-                <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-4 tw-flex tw-flex-col tw-gap-3">
-                    <div class="tw-flex tw-justify-between tw-items-center">
-                    <span class="tw-text-gray-700 tw-font-medium">Simpanan Sukarela</span>
-                    <span class="tw-text-orange-600 tw-font-semibold">Rp {{ props.simpanan.sukarela.toLocaleString("id-ID") }}</span>
+                <!-- Simpanan Wajib -->
+                <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-4 tw-flex tw-justify-between tw-items-center" >
+                    <div>
+                        <span class="tw-text-gray-700 tw-font-medium">Simpanan Wajib</span>
                     </div>
-                    <button @click="isModalVoluntaryOpen = true" round class="tw-font-semibold tw-py-2 tw-shadow-md hover:tw-brightness-110 tw-transition">
-                    <van-icon name="add-o" class="tw-mr-2" />
-                    Tambah Simpanan Sukarela
-                    </button>
-                    <Teleport to="body"> <!-- Model -->
-                        <div
-                            v-if="isModalVoluntaryOpen"
-                            class="tw-fixed tw-inset-0 tw-bg-black/50 tw-flex tw-items-center tw-justify-center tw-z-[9999]"
-                        >
-                            <div class="tw-bg-white tw-rounded-xl tw-shadow-xl tw-w-96 tw-p-6 tw-text-center">
-                                <h3 class="tw-text-lg tw-font-semibold tw-mb-4">Tambah Simpanan Sukarela</h3>
-                                <div class="tw-text-left">
-                                <label class="tw-block tw-text-gray-700 tw-font-medium tw-mb-1">Nominal Simpanan</label> <!-- Input Nominal -->
-                                <input
-                                    v-model="nominal" type="number" placeholder="Masukkan nominal"
-                                    class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-outline-none"
-                                />
-                                </div>
+                    <div class="tw-text-right">
+                        <p class="tw-text-orange-600 tw-font-semibold">
+                        Rp {{ props.simpanan.wajib.toLocaleString("id-ID") }}
+                        </p>
+                        <button @click="openModal('Mandatory')" class="tw-bg-orange-500 tw-text-white tw-rounded-lg tw-px-3 tw-py-1 tw-text-sm hover:tw-brightness-110 tw-transition tw-mt-2" >
+                            <van-icon name="add-o" class="tw-text-lg" />
+                            Tambah
+                        </button>
+                    </div>
+                </div>
 
-                                <div class="tw-text-left">
-                                <label class="tw-block tw-mt-5 tw-text-gray-700 tw-font-medium tw-mb-1">Catatan</label> <!-- Input Catatan -->
-                                <input
-                                    v-model="catatan" type="text" placeholder="Tambahkan catatan (opsional)"
-                                    class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-outline-none"
-                                />
-                                </div>
-
-                                <div class="tw-text-left">
-                                <label class="tw-block tw-mt-5 tw-text-gray-700 tw-font-medium tw-mb-1">Bukti Pembayaran</label> <!-- Input Bukti Pembayaran -->
-                                <!-- Inputan File Gambar Masih Dalam Tahap Uji Coba -->
-                                <input type="file" accept="image/*" @change="handleFileChange" class="tw-mb-4 tw-w-full">
-                                </div>
-
-                                <div class="tw-flex tw-justify-center tw-gap-4">
-                                    <button
-                                    @click="isModalVoluntaryOpen = false" class="tw-bg-red-600 tw-text-white tw-rounded-lg tw-mt-5 tw-px-4 tw-py-2 hover:tw-brightness-110"
-                                    > Batal
-                                    </button>
-                                    <!-- Button simpan belum bisa digunakan -->
-                                    <button
-                                    @click="simpanData" class="tw-bg-green-600 tw-text-white tw-rounded-lg tw-mt-5 tw-px-4 tw-py-2 hover:tw-brightness-110"
-                                    > Simpan
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </Teleport>
+                <!-- Simpanan Sukarela -->
+                <div class="tw-bg-white tw-rounded-xl tw-shadow-sm tw-p-4 tw-flex tw-justify-between tw-items-center" >
+                    <div>
+                        <span class="tw-text-gray-700 tw-font-medium">Simpanan Sukarela</span>
+                    </div>
+                    <div class="tw-text-right">
+                        <p class="tw-text-orange-600 tw-font-semibold">
+                        Rp {{ props.simpanan.sukarela.toLocaleString("id-ID") }}
+                        </p>
+                        <button @click="openModal('Voluntary')" class="tw-bg-orange-500 tw-text-white tw-rounded-lg tw-px-3 tw-py-1 tw-text-sm hover:tw-brightness-110 tw-transition tw-mt-2" >
+                            <van-icon name="add-o" class="tw-text-lg" />
+                            Tambah
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
+
+        <!-- Modal -->
+        <Teleport to="body">
+        <div v-if="isModalOpen" class="tw-fixed tw-inset-0 tw-bg-black/50 tw-flex tw-items-center tw-justify-center tw-z-[9999]" >
+            <div class="tw-bg-white tw-rounded-xl tw-shadow-xl tw-w-96 tw-p-6">
+                <h3 class="tw-text-lg tw-font-semibold tw-text-center tw-mb-4">
+                    Tambah {{ modalLabel }}
+                </h3>
+
+                <div class="tw-text-left">
+                    <label class="tw-block tw-text-gray-700 tw-font-medium tw-mb-1"
+                    >Nominal Simpanan</label>
+                    <input v-model="nominal" type="number" placeholder="Masukkan nominal"
+                    class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-outline-none"
+                    />
+                </div>
+
+                <div class="tw-text-left">
+                    <label class="tw-block tw-mt-4 tw-text-gray-700 tw-font-medium tw-mb-1"
+                    >Catatan</label>
+                    <input v-model="catatan" type="text" placeholder="Tambahkan catatan (opsional)"
+                    class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-outline-none"
+                    />
+                </div>
+
+                <!-- <div class="tw-text-left">
+                    <label class="tw-block tw-mt-4 tw-text-gray-700 tw-font-medium tw-mb-1"
+                    >Bukti Pembayaran</label>
+                    <input type="file" accept="image/*" @change="handleFileChange"
+                    class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2"
+                    />
+                </div> -->
+
+                <div class="tw-flex tw-justify-center tw-gap-4 tw-mt-6">
+                    <button @click="closeModal"
+                    class="tw-bg-red-600 tw-text-white tw-rounded-lg tw-px-4 tw-py-2 hover:tw-brightness-110"
+                    >Batal</button>
+                    <button @click="simpanData()"
+                    class="tw-bg-green-600 tw-text-white tw-rounded-lg tw-px-4 tw-py-2 hover:tw-brightness-110"
+                    >Simpan</button>
+                </div>
+            </div>
+        </div>
+        </Teleport>
 
         <div class="tw-p-5 tw-flex tw-flex-col tw-items-center tw-gap-5">
             <div class="tw-bg-gradient-to-r tw-from-blue-900 tw-to-orange-500 tw-rounded-2xl tw-w-full tw-text-white tw-p-6 tw-shadow-xl">
@@ -167,7 +186,7 @@ const isModalVoluntaryOpen = ref(false); // Status Modal Simpanan Sukarela //
                             <tr class="hover:tw-bg-white/10 tw-transition">
                                 <td class="tw-py-2 tw-pr-3 tw-text-white/90">Nominal Terakhir</td>
                                 <td class="tw-py-2 tw-pr-3">:</td>
-                                <td class="tw-py-2 tw-font-semibold">Rp 5.000.000</td>
+                                <td class="tw-py-2 tw-font-semibold">Rp {{ props.simpanan.wajib.toLocaleString("id-ID") }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -185,7 +204,7 @@ const isModalVoluntaryOpen = ref(false); // Status Modal Simpanan Sukarela //
                             <tr class="hover:tw-bg-white/10 tw-transition">
                                 <td class="tw-py-2 tw-pr-3 tw-text-white/90">Nominal Terakhir</td>
                                 <td class="tw-py-2 tw-pr-3">:</td>
-                                <td class="tw-py-2 tw-font-semibold">Rp 6.000.000</td>
+                                <td class="tw-py-2 tw-font-semibold">Rp {{ props.simpanan.pokok.toLocaleString("id-ID") }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -203,14 +222,12 @@ const isModalVoluntaryOpen = ref(false); // Status Modal Simpanan Sukarela //
                             <tr class="hover:tw-bg-white/10 tw-transition">
                                 <td class="tw-py-2 tw-pr-3 tw-text-white/90">Nominal Terakhir</td>
                                 <td class="tw-py-2 tw-pr-3">:</td>
-                                <td class="tw-py-2 tw-font-semibold">Rp 1.500.000</td>
+                                <td class="tw-py-2 tw-font-semibold">{{ props.simpanan.sukarela.toLocaleString("id-ID") }}</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
-
             </div>
         </div>
-
     </AuthenticatedLayout>
 </template>
