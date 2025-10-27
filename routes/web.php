@@ -47,6 +47,7 @@ Route::prefix('member')
         Route::get('/dashboard', MemberDashboardController::class)->name('dashboard');
         Route::get('/cart', CartController::class)->name('cart');
         Route::get('/finances', [FinancesController::class, 'index'])->name('finances');
+        Route::post('/finances/store', [FinancesController::class, 'store'])->name('finances.store');
         Route::get('/status', StatusController::class)->name('status');
         Route::get('/products', [\App\Http\Controllers\Member\ProductsController::class, 'index'])->name('products');
         Route::get('/products/{product:slug}', [\App\Http\Controllers\Member\ProductsController::class, 'show'])->name('products.show');
