@@ -23,7 +23,10 @@ return new class extends Migration
         Schema::create('savings_transactions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('savings_account_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('admin_user_id')->nullable()->change();
+            $table->foreignId('admin_user_id')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
             $table->decimal('amount', 15, 2);
             $table->string('type', 50);
             $table->text('description')->nullable();
@@ -39,9 +42,5 @@ return new class extends Migration
     {
         Schema::dropIfExists('savings_transactions');
         Schema::dropIfExists('savings_accounts');
-        Schema::table('savings_transactions', function (Blueprint $table){
-            $table->foreignId('admin_user_id')->nullable(false)->change();
-        });
     }
 };
-
