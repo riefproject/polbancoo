@@ -7,6 +7,8 @@
     totalSaldo: Number,
     simpanan: Object,
     lastUpdate: String,
+    historytanggalsimpanan: Object,
+    historynominalsimpanan: Object
     });
 
     const isModalOpen = ref(false);
@@ -160,7 +162,7 @@
                     <button @click="closeModal"
                     class="tw-bg-red-600 tw-text-white tw-rounded-lg tw-px-4 tw-py-2 hover:tw-brightness-110"
                     >Batal</button>
-                    <button @click="simpanData()"
+                    <button @click="simpanData"
                     class="tw-bg-green-600 tw-text-white tw-rounded-lg tw-px-4 tw-py-2 hover:tw-brightness-110"
                     >Simpan</button>
                 </div>
@@ -175,36 +177,36 @@
                 </h1>
 
                 <div class="tw-bg-white/20 tw-rounded-xl tw-p-4 tw-mb-4 tw-shadow-inner">
-                    <p class="tw-text-lg tw-font-semibold tw-mb-2 tw-text-white/90">Simpanan Wajib</p>
-                    <table class="tw-w-full tw-text-sm tw-text-left tw-border-collapse">
-                        <tbody>
-                            <tr class="hover:tw-bg-white/10 tw-transition">
-                                <td class="tw-py-2 tw-pr-3 tw-text-white/90">Tanggal Terakhir</td>
-                                <td class="tw-py-2 tw-pr-3">:</td>
-                                <td class="tw-py-2 tw-font-semibold">29/02/2026</td>
-                            </tr>
-                            <tr class="hover:tw-bg-white/10 tw-transition">
-                                <td class="tw-py-2 tw-pr-3 tw-text-white/90">Nominal Terakhir</td>
-                                <td class="tw-py-2 tw-pr-3">:</td>
-                                <td class="tw-py-2 tw-font-semibold">Rp {{ props.simpanan.wajib.toLocaleString("id-ID") }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="tw-bg-white/20 tw-rounded-xl tw-p-4 tw-mb-4 tw-shadow-inner">
                     <p class="tw-text-lg tw-font-semibold tw-mb-2 tw-text-white/90">Simpanan Pokok</p>
                     <table class="tw-w-full tw-text-sm tw-text-left tw-border-collapse">
                         <tbody>
                             <tr class="hover:tw-bg-white/10 tw-transition">
                                 <td class="tw-py-2 tw-pr-3 tw-text-white/90">Tanggal Terakhir</td>
                                 <td class="tw-py-2 tw-pr-3">:</td>
-                                <td class="tw-py-2 tw-font-semibold">29/02/2026</td>
+                                <td class="tw-py-2 tw-font-semibold">{{ props.historytanggalsimpanan.historypokok }}</td>
                             </tr>
                             <tr class="hover:tw-bg-white/10 tw-transition">
                                 <td class="tw-py-2 tw-pr-3 tw-text-white/90">Nominal Terakhir</td>
                                 <td class="tw-py-2 tw-pr-3">:</td>
-                                <td class="tw-py-2 tw-font-semibold">Rp {{ props.simpanan.pokok.toLocaleString("id-ID") }}</td>
+                                <td class="tw-py-2 tw-font-semibold">Rp {{ Number(props.historynominalsimpanan.nominalhistorypokok ?? 0).toLocaleString('id-ID') }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tw-bg-white/20 tw-rounded-xl tw-p-4 tw-mb-4 tw-shadow-inner">
+                    <p class="tw-text-lg tw-font-semibold tw-mb-2 tw-text-white/90">Simpanan Wajib</p>
+                    <table class="tw-w-full tw-text-sm tw-text-left tw-border-collapse">
+                        <tbody>
+                            <tr class="hover:tw-bg-white/10 tw-transition">
+                                <td class="tw-py-2 tw-pr-3 tw-text-white/90">Tanggal Terakhir</td>
+                                <td class="tw-py-2 tw-pr-3">:</td>
+                                <td class="tw-py-2 tw-font-semibold">{{ props.historytanggalsimpanan.historywajib }}</td>
+                            </tr>
+                            <tr class="hover:tw-bg-white/10 tw-transition">
+                                <td class="tw-py-2 tw-pr-3 tw-text-white/90">Nominal Terakhir</td>
+                                <td class="tw-py-2 tw-pr-3">:</td>
+                                <td class="tw-py-2 tw-font-semibold">Rp {{ Number(props.historynominalsimpanan.nominalhistorywajib ?? 0).toLocaleString('id-ID') }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -217,12 +219,12 @@
                             <tr class="hover:tw-bg-white/10 tw-transition">
                                 <td class="tw-py-2 tw-pr-3 tw-text-white/90">Tanggal Terakhir</td>
                                 <td class="tw-py-2 tw-pr-3">:</td>
-                                <td class="tw-py-2 tw-font-semibold">29/02/2026</td>
+                                <td class="tw-py-2 tw-font-semibold">{{ props.historytanggalsimpanan.historysukarela }}</td>
                             </tr>
                             <tr class="hover:tw-bg-white/10 tw-transition">
                                 <td class="tw-py-2 tw-pr-3 tw-text-white/90">Nominal Terakhir</td>
                                 <td class="tw-py-2 tw-pr-3">:</td>
-                                <td class="tw-py-2 tw-font-semibold">{{ props.simpanan.sukarela.toLocaleString("id-ID") }}</td>
+                                <td class="tw-py-2 tw-font-semibold">Rp {{ Number(props.historynominalsimpanan.nominalhistorysukarela ?? 0).toLocaleString('id-ID') }}</td>
                             </tr>
                         </tbody>
                     </table>
