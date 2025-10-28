@@ -35,16 +35,18 @@ const currentYear = new Date().getFullYear();
                 <div class="tw-flex tw-items-center tw-gap-4">
                     <img
                         src="/img/logo.png"
-                        class="tw-h-12 tw-w-12"
+                        class="tw-h-8 tw-w-8 md:tw-h-12 md:tw-w-12"
                         alt="KopSy-Campus Logo"
                     />
                     <div>
                         <p
-                            class="tw-text-lg tw-font-semibold tw-text-secondary"
+                            class="tw-text-base md:tw-text-lg tw-font-semibold tw-text-secondary"
                         >
                             KopSy-Campus
                         </p>
-                        <p class="tw-text-sm tw-text-secondary/70">
+                        <p
+                            class="tw-text-sm tw-text-secondary/70 tw-hidden md:tw-block"
+                        >
                             Koperasi Syariah Digital Polban
                         </p>
                     </div>
@@ -286,12 +288,9 @@ const currentYear = new Date().getFullYear();
             <div
                 class="tw-mx-auto tw-flex tw-max-w-6xl tw-flex-col tw-items-center tw-gap-2 tw-px-6 md:tw-flex-row md:tw-justify-between"
             >
-                <p class="tw-text-sm tw-text-gray-500">
+                <p class="tw-text-sm tw-text-gray-500 tw-text-center">
                     © {{ currentYear }} KopSy-Campus — Politeknik Negeri
                     Bandung.
-                </p>
-                <p class="tw-text-xs tw-text-gray-400">
-                    Laravel v{{ laravelVersion }} · PHP v{{ phpVersion }}
                 </p>
             </div>
         </footer>
