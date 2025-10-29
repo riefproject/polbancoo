@@ -39,15 +39,15 @@ const props = defineProps({
     <article
         class="tw-flex tw-h-full tw-flex-col tw-overflow-hidden tw-rounded-2xl tw-border tw-border-slate-200 tw-bg-white tw-shadow-sm"
     >
-        <div
-            v-if="thumbnail"
-            class="tw-relative tw-h-[180px] tw-overflow-hidden sm:tw-h-[200px]"
-        >
-            <img
-                :src="thumbnail"
-                :alt="title"
-                class="tw-h-full tw-w-full tw-object-cover tw-object-center"
-            />
+        <div v-if="thumbnail" class="tw-relative tw-h-full tw-overflow-hidden">
+            <div class="tw-w-full">
+                <img
+                    :src="thumbnail"
+                    :alt="title"
+                    class="tw-w-full tw-h-auto tw-object-cover tw-object-center tw-border-b"
+                    style="aspect-ratio: 1 / 1"
+                />
+            </div>
             <span
                 v-if="tag"
                 class="tw-absolute tw-left-3 tw-top-3 tw-rounded-full tw-bg-slate-900/90 tw-px-3 tw-py-1 tw-text-xs tw-font-semibold tw-uppercase tw-text-white"
@@ -60,43 +60,35 @@ const props = defineProps({
             </span>
         </div>
 
-        <div class="tw-flex tw-flex-1 tw-flex-col tw-gap-4 tw-p-5">
+        <div class="tw-flex tw-flex-1 tw-flex-col tw-p-3 md:tw-p-5">
             <header class="tw-space-y-2">
-                <h3 class="tw-text-lg tw-font-semibold tw-text-slate-900">
+                <h3
+                    class="tw-text-sm md:tw-text-base tw-font-semibold tw-text-slate-900"
+                >
                     {{ title }}
                 </h3>
             </header>
 
             <div
-                class="tw-mt-auto tw-flex tw-items-center tw-justify-between tw-border-t tw-border-slate-200 tw-pt-4"
+                class="tw-mt-auto tw-flex tw-items-center tw-justify-between tw-border-slate-200 tw-pt-2 md:tw-pt-4"
             >
                 <div class="tw-flex tw-items-baseline tw-gap-1">
                     <span class="tw-text-sm tw-font-medium tw-text-slate-500">
                         {{ currency }}
                     </span>
-                    <span class="tw-text-xl tw-font-bold text-primary">
+                    <span
+                        class="tw-text-base md:tw-text-xl tw-font-bold text-primary tw-truncate tw-max-w-[8rem]"
+                        :title="price"
+                    >
                         {{ price }}
                     </span>
                 </div>
             </div>
-            <span class="tw-text-xs tw-font-medium tw-text-slate-500">
+            <span
+                class="tw-text-xs md:tw-text-xs tw-font-medium tw-text-slate-500"
+            >
                 Tersedia: {{ quantity }}
             </span>
         </div>
-
-        <footer class="tw-grid tw-gap-3 tw-px-5 tw-pb-5">
-            <slot name="footer">
-                <button
-                    class="tw-inline-flex tw-items-center tw-justify-center tw-rounded-md tw-border tw-border-transparent tw-bg-primary tw-px-4 tw-py-2 tw-text-sm tw-font-medium tw-text-white hover:tw-bg-primary/80 focus:outline-none focus:ring-2 focus:ring-primary/50"
-                >
-                    Lihat Detail
-                </button>
-                <button
-                    class="tw-inline-flex tw-items-center tw-justify-center tw-rounded-md tw-border tw-border-primary tw-bg-white tw-px-4 tw-py-2 tw-text-sm tw-font-medium tw-text-primary hover:tw-bg-primary/10 focus:outline-none focus:ring-2 focus:ring-primary/50"
-                >
-                    Tambah ke Keranjang
-                </button>
-            </slot>
-        </footer>
     </article>
 </template>

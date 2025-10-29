@@ -25,7 +25,7 @@ Route::prefix('superadmin')
     ->name('superadmin.')
     ->middleware(['auth', 'verified', 'role:Super Admin'])
     ->group(function () {
-        Route::get('/dashboard', SuperAdminDashboardController::class)->name('dashboard');
+    Route::get('/dashboard', SuperAdminDashboardController::class)->name('dashboard');
         Route::resource('admins', \App\Http\Controllers\SuperAdmin\AdminController::class);
     });
 
@@ -33,7 +33,7 @@ Route::prefix('admin')
     ->name('admin.')
     ->middleware(['auth', 'verified', 'role:Admin,Super Admin'])
     ->group(function () {
-        Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
+    Route::get('/dashboard', AdminDashboardController::class)->name('dashboard');
         Route::get('/products', [ProductsController::class, 'index'])->name('products');
         Route::get('/members', [MembersController::class, 'index'])->name('members');
         Route::get('/approvals', [ApprovalsController::class, 'index'])->name('approvals');
@@ -44,13 +44,14 @@ Route::prefix('member')
     ->name('member.')
     ->middleware(['auth', 'verified', 'role:Anggota'])
     ->group(function () {
-        Route::get('/dashboard', MemberDashboardController::class)->name('dashboard');
-        Route::get('/cart', CartController::class)->name('cart');
+    Route::get('/dashboard', MemberDashboardController::class)->name('dashboard');
+    Route::get('/cart', CartController::class)->name('cart');
         Route::get('/finances', [FinancesController::class, 'index'])->name('finances');
         Route::post('/finances/store', [FinancesController::class, 'store'])->name('finances.store');
-        Route::get('/status', StatusController::class)->name('status');
-        Route::get('/products', [\App\Http\Controllers\Member\ProductsController::class, 'index'])->name('products');
+    Route::get('/status', StatusController::class)->name('status');
+    Route::get('/products', [\App\Http\Controllers\Member\ProductsController::class, 'index'])->name('products');
         Route::get('/products/{product:slug}', [\App\Http\Controllers\Member\ProductsController::class, 'show'])->name('products.show');
+    Route::get('/profile', \App\Http\Controllers\Member\ProfileController::class)->name('profile');
     });
 
 Route::middleware('auth')->group(function () {

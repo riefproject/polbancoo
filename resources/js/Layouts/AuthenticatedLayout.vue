@@ -1,12 +1,15 @@
 <script setup>
 import { computed, ref, watch } from "vue";
-import { router, usePage } from "@inertiajs/vue3";
+import { router, usePage, Link } from "@inertiajs/vue3";
+import { Settings } from "lucide-vue-next";
 
 import AdminSidebar from "@/Components/navigation/AdminSidebar.vue";
 import AdminMobileNav from "@/Components/navigation/AdminMobileNav.vue";
 import MemberTopBar from "@/Components/navigation/MemberTopBar.vue";
 import MemberBottomNav from "@/Components/navigation/MemberBottomNav.vue";
 import MemberMobileSearchBar from "@/Components/navigation/MemberMobileSearchBar.vue";
+import MemberMobileTopBar from "@/Components/navigation/MemberMobileTopBar.vue";
+import CartIcon from "@/Components/CartIcon.vue";
 
 const page = usePage();
 
@@ -94,11 +97,11 @@ const memberLinks = [
         patterns: ["member.status"],
     },
     {
-        name: "profile.edit",
+        name: "member.profile",
         label: "Profile",
         icon: "user-o",
         iconFilled: "user",
-        patterns: ["profile.*"],
+        patterns: ["member.profile", "member.profile.*"],
     },
 ];
 
@@ -118,6 +121,11 @@ const currentSidebarLinks = computed(() =>
 const sidebarTitle = computed(() =>
     isSuperAdmin.value ? "KopSy Super Admin" : "KopSy Admin"
 );
+
+const curTitle = computed(() => {
+    const activeLink = currentSidebarLinks.value.find((link) => link.active);
+    return activeLink ? activeLink.label : "Dashboard";
+});
 
 const currentMemberLinks = computed(() =>
     memberLinks.map((link) => ({
@@ -154,7 +162,7 @@ watch(
 );
 </script>
 
-<template>
+<template :currentTitle="curTitle">
     <div class="tw-min-h-screen tw-bg-gray-100">
         <div v-if="isAdminLike" class="tw-flex tw-min-h-screen">
             <AdminSidebar
@@ -189,19 +197,45 @@ watch(
         </div>
 
         <div v-else class="tw-flex tw-min-h-screen tw-flex-col">
-            <MemberMobileSearchBar :cart-route="route('member.cart')" />
+            <template v-if="route().current('member.dashboard')">
+                <MemberMobileSearchBar :cart-route="route('member.cart')" />
+            </template>
+            <template v-else-if="route().current('member.profile')"> </template>
+            <template v-else-if="route().current('member.finances')">
+                <MemberMobileTopBar title="Finances" @back="history.back()" />
+            </template>
+            <template v-else-if="route().current('member.status')">
+                <MemberMobileTopBar title="Status" @back="history.back()" />
+            </template>
+
             <MemberTopBar :links="currentMemberLinks" :user="user" />
 
-            <header
-                v-if="$slots.header"
-                class="tw-border-b tw-border-slate-200 tw-bg-white"
-            >
-                <div class="tw-px-4 tw-py-6 sm:tw-px-6 lg:tw-px-8">
-                    <slot name="header" />
-                </div>
-            </header>
-
             <main class="tw-flex-1">
+                <template v-if="route().current('member.profile')">
+                    <div class="tw-bg-primary tw-min-h-[25svh]">
+                        <div
+                            class="tw-items-center tw-w-full tw-flex tw-justify-between tw-sticky tw-top-0 tw-z-40 tw-border-btw-backdrop-blur tw-px-8 tw-py-5 md:tw-hidden"
+                        >
+                            <h2 class="tw-text-xl tw-font-bold tw-text-white">
+                                Profile
+                            </h2>
+                            <div>
+                                <Link
+                                    href="#"
+                                    class="btn-icon tw-relative tw-h-12 tw-w-12 tw-flex-shrink-0"
+                                >
+                                    <Settings
+                                        class="tw-text-3xl tw-text-white"
+                                    />
+                                </Link>
+                                <CartIcon
+                                    buble-class="tw-absolute tw--right-1 tw--top-1 tw-inline-flex tw-h-5 tw-min-w-[1.25rem] tw-items-center tw-justify-center tw-rounded-full tw-bg-white tw-px-1 tw-text-[10px] tw-text-primary tw-font-bold"
+                                    icon-class="tw-text-3xl tw-text-white tw-font-bold"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </template>
                 <div
                     class="tw-px-4 tw-py-6 tw-pb-24 sm:tw-px-6 lg:tw-px-8 md:tw-pb-12"
                 >

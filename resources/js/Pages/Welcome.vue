@@ -38,15 +38,13 @@ const currentYear = new Date().getFullYear();
                         class="tw-h-8 tw-w-8 md:tw-h-12 md:tw-w-12"
                         alt="KopSy-Campus Logo"
                     />
-                    <div>
+                    <div class="tw-hidden md:tw-block">
                         <p
-                            class="tw-text-base md:tw-text-lg tw-font-semibold tw-text-secondary"
+                            class="tw-text-xs md:tw-text-lg tw-font-semibold tw-text-secondary"
                         >
                             KopSy-Campus
                         </p>
-                        <p
-                            class="tw-text-sm tw-text-secondary/70 tw-hidden md:tw-block"
-                        >
+                        <p class="tw-text-sm tw-text-secondary/70">
                             Koperasi Syariah Digital Polban
                         </p>
                     </div>
@@ -57,16 +55,16 @@ const currentYear = new Date().getFullYear();
                 >
                     <Link
                         :href="route('login')"
-                        class="tw-inline-flex tw-items-center tw-gap-2 tw-rounded-full tw-border tw-border-secondary tw-px-5 tw-py-2 tw-text-sm tw-font-medium tw-text-secondary tw-transition hover:tw-bg-secondary hover:tw-text-secondary-contrast"
+                        class="tw-inline-flex tw-items-center tw-gap-2 tw-rounded-full tw-border tw-border-secondary tw-px-4 md:tw-px-5 tw-py-2 tw-text-xs md:tw-text-sm tw-font-medium tw-text-secondary tw-transition hover:tw-bg-secondary hover:tw-text-secondary-contrast"
                     >
                         Masuk
                     </Link>
                     <Link
                         v-if="canRegister"
                         :href="route('register')"
-                        class="tw-inline-flex tw-items-center tw-gap-2 tw-rounded-full tw-bg-primary tw-px-5 tw-py-2 tw-text-sm tw-font-medium tw-text-primary-contrast tw-shadow hover:tw-bg-ternary hover:tw-text-ternary-contrast"
+                        class="tw-inline-flex tw-items-center tw-gap-2 tw-rounded-full tw-bg-primary tw-px-4 md:tw-px-5 tw-py-2 tw-text-xs md:tw-text-sm tw-font-medium tw-text-primary-contrast tw-shadow hover:tw-bg-ternary hover:tw-text-ternary-contrast"
                     >
-                        Daftar Anggota
+                        Daftar
                     </Link>
                 </div>
             </div>

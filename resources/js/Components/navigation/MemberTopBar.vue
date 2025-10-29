@@ -18,19 +18,19 @@ const props = defineProps({
     },
     toKeuangan: {
         type: String,
-        default: "./finances",
+        default: "./member/finances",
     },
     toStatus: {
         type: String,
-        default: "./status",
+        default: "./member/status",
     },
     toCart: {
         type: String,
-        default: "./cart",
+        default: "./member/cart",
     },
     toProfile: {
         type: String,
-        default: "../profile",
+        default: "./member/profile",
     },
 });
 
@@ -43,7 +43,6 @@ const handleSearch = () => {
         router.get(route("member.products"));
     }
 };
-
 </script>
 
 <template>
