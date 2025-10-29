@@ -12,13 +12,21 @@ export default {
         leftText: { type: String, default: "" },
         leftArrow: { type: Boolean, default: true },
         iconSize: { type: [String, Number], default: "30px" },
+        showCart: { type: Boolean, default: true },
     },
     methods: {
         onClickLeft() {
-            this.$emit("back");
-        },
-        onCart() {
-            this.$emit("cart");
+            if (this.$router && typeof this.$router.back === "function") {
+                this.$router.back();
+            } else if (
+                window &&
+                window.history &&
+                typeof window.history.back === "function"
+            ) {
+                window.history.back();
+            } else {
+                window.location.href = "/";
+            }
         },
     },
 };
@@ -51,13 +59,9 @@ export default {
 
             <!-- Right: fixed width to match left -->
             <div class="tw-w-20 tw-flex tw-items-center tw-justify-end">
-                <button
-                    type="button"
-                    class="tw-flex tw-items-center"
-                    @click="onCart"
-                >
+                <template v-if="showCart">
                     <CartIcon />
-                </button>
+                </template>
             </div>
         </div>
     </div>

@@ -207,12 +207,18 @@ watch(
             <template v-else-if="route().current('member.status')">
                 <MemberMobileTopBar title="Status" @back="history.back()" />
             </template>
-
+            <template v-else-if="route().current('member.cart')">
+                <MemberMobileTopBar
+                    title="Keranjang"
+                    @back="history.back()"
+                    :show-cart="false"
+                />
+            </template>
             <MemberTopBar :links="currentMemberLinks" :user="user" />
 
             <main class="tw-flex-1">
                 <template v-if="route().current('member.profile')">
-                    <div class="tw-bg-primary tw-min-h-[25svh]">
+                    <div class="md:tw-hidden tw-bg-primary md:tw-min-h-[25svh]">
                         <div
                             class="tw-items-center tw-w-full tw-flex tw-justify-between tw-sticky tw-top-0 tw-z-40 tw-border-btw-backdrop-blur tw-px-8 tw-py-5 md:tw-hidden"
                         >

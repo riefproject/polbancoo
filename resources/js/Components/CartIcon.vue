@@ -5,7 +5,7 @@ import { ShoppingCart } from "lucide-vue-next";
 const props = defineProps({
     cartRoute: {
         type: String,
-        default: "#",
+        default: route("member.cart"),
     },
     cartQty: {
         type: Number,

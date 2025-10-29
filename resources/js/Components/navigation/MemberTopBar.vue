@@ -18,19 +18,19 @@ const props = defineProps({
     },
     toKeuangan: {
         type: String,
-        default: "./member/finances",
+        default: route("member.finances"),
     },
     toStatus: {
         type: String,
-        default: "./member/status",
+        default: route("member.status"),
     },
     toCart: {
         type: String,
-        default: "./member/cart",
+        default: route("member.cart"),
     },
     toProfile: {
         type: String,
-        default: "./member/profile",
+        default: route("member.profile"),
     },
 });
 
