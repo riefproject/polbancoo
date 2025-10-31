@@ -52,6 +52,7 @@ Route::prefix('member')
     Route::get('/products', [\App\Http\Controllers\Member\ProductsController::class, 'index'])->name('products');
         Route::get('/products/{product:slug}', [\App\Http\Controllers\Member\ProductsController::class, 'show'])->name('products.show');
     Route::get('/profile', \App\Http\Controllers\Member\ProfileController::class)->name('profile');
+    Route::post('/profile/upload-avatar', [\App\Http\Controllers\Member\ProfileController::class, 'uploadAvatar'])->name('profile.upload.avatar');
     });
 
 Route::middleware('auth')->group(function () {
