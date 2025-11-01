@@ -16,6 +16,8 @@ import {
     Field,
     Radio,
     RadioGroup,
+    Stepper,
+    Toast,
 } from "vant";
 
 export function registerVant(app) {
@@ -36,4 +38,6 @@ export function registerVant(app) {
     app.use(Field);
     app.use(Radio);
     app.use(RadioGroup);
+    app.use(Stepper);
+    app.use(Toast);
 }

@@ -2,6 +2,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
 import { ref } from "vue";
+import { showToast } from "vant";
 
 defineProps({
   product: Object,
@@ -18,9 +19,11 @@ const decreaseQty = () => {
 };
 
 const addToCart = () => {
-  alert(
-    `Produk "${product.name}" (${quantity.value}x) ditambahkan ke keranjang.`
-  );
+  showToast({
+    message: `Produk "${product.name}" (${quantity.value}x) ditambahkan ke keranjang.`,
+    type: "success",
+    duration: 1500,
+  });
 };
 
 const goToDetail = (id) => {
@@ -33,88 +36,74 @@ const goToDetail = (id) => {
 
   <AuthenticatedLayout>
     <template #header>
-      <h2 class="tw-text-xl tw-font-semibold tw-leading-tight tw-text-gray-800">
-        Detail Produk
-      </h2>
+      <van-nav-bar
+        title="Detail Produk"
+        left-text="Kembali"
+        left-arrow
+        @click-left="$inertia.visit(route('member.products'))"
+      />
     </template>
 
-    <!-- Bagian Utama Produk -->
-    <div
-      class="tw-flex tw-flex-col md:tw-flex-row tw-gap-8 tw-p-6 md:tw-p-8"
-    >
-      <!-- FOTO PRODUK -->
-      <div class="md:tw-w-[40%] tw-flex tw-justify-center tw-items-start">
-        <img
+    <!-- Detail Produk -->
+    <div class="tw-px-6 tw-py-8 tw-text-gray-800">
+      <!-- Foto Produk -->
+      <div class="tw-flex tw-justify-center tw-items-center tw-mb-6">
+        <van-image
           :src="product.image_url || '/img/no-image.png'"
-          alt="Product Image"
-          class="tw-w-80 tw-h-80 tw-object-cover tw-rounded-xl tw-border tw-border-gray-200"
+          width="320"
+          height="320"
+          fit="cover"
+          radius="12"
+          class="tw-border tw-border-gray-200"
         />
       </div>
 
-      <!-- DETAIL PRODUK -->
-      <div class="md:tw-w-[60%] tw-space-y-5 tw-text-gray-800">
-        <h1 class="tw-text-3xl tw-font-extrabold tw-text-blue-900">
-          {{ product.name }}
-        </h1>
+      <!-- Nama Produk -->
+      <h1 class="tw-text-3xl tw-font-extrabold tw-text-blue-900 tw-text-left">
+        {{ product.name }}
+      </h1>
 
-        <p class="tw-text-2xl tw-text-orange-600 tw-font-bold">
-          Rp {{ Number(product.cash_price).toLocaleString("id-ID") }}
-        </p>
+      <!-- Harga -->
+      <p class="tw-text-2xl tw-text-orange-600 tw-font-bold tw-mt-2 tw-text-left">
+        Rp {{ Number(product.cash_price).toLocaleString("id-ID") }}
+      </p>
 
-        <p class="tw-text-lg tw-leading-relaxed tw-text-gray-700 tw-mt-2">
-          {{ product.description || "Tidak ada deskripsi untuk produk ini." }}
-        </p>
+      <!-- Deskripsi Produk -->
+      <p class="tw-text-base tw-leading-relaxed tw-text-gray-700 tw-mt-4 tw-text-justify">
+        {{ product.description || "Tidak ada deskripsi untuk produk ini." }}
+      </p>
 
-        <!-- Kuantitas -->
-        <div class="tw-mt-6 tw-space-y-6">
-          <div class="tw-flex tw-flex-col md:tw-flex-row tw-items-start md:tw-items-center tw-gap-2 md:tw-gap-4">
-            <div class="tw-flex tw-items-center tw-gap-4">
-              <span class="tw-font-semibold tw-text-lg">Kuantitas:</span>
-
-              <div class="tw-flex tw-items-center tw-gap-2">
-                <button
-                  @click="decreaseQty"
-                  class="tw-w-9 tw-h-9 tw-rounded-full tw-bg-gray-200 hover:tw-bg-gray-300 tw-font-bold tw-text-lg tw-leading-none"
-                >
-                  -
-                </button>
-                <span
-                  class="tw-min-w-[2rem] tw-text-center tw-text-lg tw-font-medium"
-                >
-                  {{ quantity }}
-                </span>
-                <button
-                  @click="increaseQty"
-                  class="tw-w-9 tw-h-9 tw-rounded-full tw-bg-gray-200 hover:tw-bg-gray-300 tw-font-bold tw-text-lg tw-leading-none"
-                >
-                  +
-                </button>
-              </div>
-            </div>
-
-            <!-- Stok tersedia -->
-            <span
-              class="tw-text-base tw-text-gray-500 tw-ml-0 md:tw-ml-2 tw-mt-1 md:tw-mt-0"
-            >
-              Stok tersedia: {{ product.stock }}
-            </span>
+      <!-- Kuantitas Produk -->
+      <div class="tw-mt-8 tw-space-y-6">
+        <div class="tw-flex tw-flex-col tw-items-start tw-gap-2">
+          <span class="tw-font-semibold tw-text-lg">Kuantitas:</span>
+          <!-- stepper muncul di sini -->
+          <div class="tw-flex tw-items-center tw-gap-2">
+            <van-stepper v-model="quantity" min="1" :max="product.stock" />
           </div>
+          <span class="tw-text-sm tw-text-gray-500">
+            Stok tersedia: {{ product.stock }}
+          </span>
+        </div>
 
-          <!-- Tombol Tambah ke Keranjang -->
-          <div class="tw-flex tw-justify-center md:tw-justify-start">
-            <button
-              @click="addToCart"
-              class="tw-border tw-border-orange-500 tw-text-orange-500 tw-font-semibold tw-rounded-full tw-px-8 tw-py-3 hover:tw-bg-orange-50 tw-transition tw-text-base"
-            >
-              Tambah ke Keranjang
-            </button>
-          </div>
+        <div class="tw-flex tw-justify-start">
+          <van-button
+            type="primary"
+            color="#f97316"
+            round
+            size="large"
+            icon="cart-o"
+            class="tw-text-white tw-font-semibold"
+            @click="addToCart"
+          >
+            Tambah ke Keranjang
+          </van-button>
         </div>
       </div>
     </div>
 
-    <!-- Produk Rekomendasi -->
-    <div class="tw-mt-12">
+    <!-- Rekomendasi Produk -->
+    <div class="tw-mt-12 tw-px-6 tw-pb-12">
       <h3 class="tw-text-2xl tw-font-semibold tw-text-gray-800 tw-mb-6">
         Rekomendasi Produk Lainnya
       </h3>
@@ -122,28 +111,18 @@ const goToDetail = (id) => {
       <div
         class="tw-grid tw-grid-cols-1 sm:tw-grid-cols-2 lg:tw-grid-cols-3 tw-gap-6"
       >
-        <div
+        <van-card
           v-for="rec in recommendations"
           :key="rec.id"
+          :title="rec.name"
+          :desc="rec.description || 'Tanpa deskripsi'"
+          :thumb="rec.image_url || '/img/no-image.png'"
+          :price="Number(rec.cash_price).toLocaleString('id-ID')"
+          currency="Rp"
+          centered
           @click="goToDetail(rec.id)"
-          class="tw-bg-white tw-rounded-xl tw-overflow-hidden tw-shadow hover:tw-shadow-lg hover:tw-scale-[1.02] tw-transition tw-cursor-pointer"
-        >
-          <img
-            :src="rec.image_url || '/img/no-image.png'"
-            alt="Product Image"
-            class="tw-w-full tw-h-44 tw-object-cover"
-          />
-          <div class="tw-p-4">
-            <h4
-              class="tw-font-semibold tw-text-blue-900 tw-text-lg tw-truncate"
-            >
-              {{ rec.name }}
-            </h4>
-            <p class="tw-text-orange-600 tw-font-bold tw-mt-1 tw-text-base">
-              Rp {{ Number(rec.cash_price).toLocaleString("id-ID") }}
-            </p>
-          </div>
-        </div>
+          class="tw-rounded-xl tw-shadow hover:tw-shadow-lg hover:tw-scale-[1.02] tw-transition tw-cursor-pointer"
+        />
       </div>
     </div>
   </AuthenticatedLayout>
