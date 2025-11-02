@@ -55,6 +55,19 @@ class FinancesController extends Controller
             ->orderByDesc('transaction_date')
             ->value('amount');
 
+        // History Simpanan (Status) //
+        $historySimpananDiterima = SavingsTransaction::where('savings_account_id', $savingsAccount->id)
+            ->whereNotNull('admin_user_id')
+            ->get();
+
+        $historySimpananDitolak = SavingsTransaction::where('savings_account_id', $savingsAccount->id)
+            ->where('admin_user_id', 0)
+            ->get();
+
+        $historySimpananPending = SavingsTransaction::where('savings_account_id', $savingsAccount->id)
+            ->where('admin_user_id', null)
+            ->get();
+
         // Kirim Data Ke Vue //
         return Inertia::render('Member/Finances', [
             'totalSaldo' => $totalSimpanan,
@@ -73,7 +86,21 @@ class FinancesController extends Controller
                 'nominalhistorypokok' => $nominalhistorypokok,
                 'nominalhistorywajib' => $nominalhistorywajib,
                 'nominalhistorysukarela' => $nominalhistorysukarela
+            ],
+            'historytopup' => [
+                'historyditerima' => $historySimpananDiterima,
+                'historyditolak' => $historySimpananDitolak,
+                'historypending' => $historySimpananPending
             ]
+        ]);
+    }
+
+    public function create($type)
+    {
+        return Inertia::render('Member/AddFinances', [
+            'type' => $type,
+            'title' => ' Simpanan ' . ucfirst($type),
+            'fixedNominal' => $type === 'wajib' ? 100000 : null
         ]);
     }
 

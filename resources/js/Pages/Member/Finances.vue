@@ -8,55 +8,53 @@
     simpanan: Object,
     lastUpdate: String,
     historytanggalsimpanan: Object,
-    historynominalsimpanan: Object
+    historynominalsimpanan: Object,
+    historytopup: Object
     });
 
-    const isModalOpen = ref(false);
-    const modalType = ref(""); // Mandatory atau Voluntary //
-    const nominal = ref("");
-    const catatan = ref("");
-    const file = ref(null);
+    const allHistory = computed(() => {
+        const diterima = props.historytopup.historyditerima?.map(item => ({
+            nominal: item.amount,
+            tanggal: new Date(item.transaction_date),
+            status: 'Diterima',
+            admin_user_id: item.admin_user_id
+        })) || [];
 
-    function openModal(type) {
-        modalType.value = type;
-        isModalOpen.value = true;
-    }
+        const ditolak = props.historytopup.historyditolak?.map(item => ({
+            nominal: item.amount,
+            tanggal: new Date(item.transaction_date),
+            status: 'Ditolak',
+            admin_user_id: item.admin_user_id
+        })) || [];
 
-    function closeModal() {
-        isModalOpen.value = false;
-        nominal.value = "";
-        catatan.value = "";
-    }
+        const pending = props.historytopup.historypending?.map(item => ({
+            nominal: item.amount,
+            tanggal: new Date(item.transaction_date),
+            status: 'Pending',
+            admin_user_id: item.admin_user_id
+        })) || [];
 
-    const modalLabel = computed(() => {
-        if (modalType.value === "Mandatory") return "Simpanan Wajib";
-        if (modalType.value === "Voluntary") return "Simpanan Sukarela";
-        return "";
+        // Spread Operator //
+        return [...pending, ...diterima, ...ditolak].sort((b, a) =>
+            new Date(b.tanggal) - new Date(a.tanggal)
+        );
     });
 
-    function simpanData() {
-        if (!nominal.value) {
-            alert("Nominal tidak boleh kosong!");
-            return;
-        }
+    const isOpen = ref(false);
 
-        const formData = new FormData();
-        formData.append("type", modalType.value);
-        formData.append("amount", nominal.value);
-        formData.append("description", catatan.value);
+    function toggleMenu() {
+    isOpen.value = !isOpen.value;
+    }
 
-        router.post("/member/finances/store", formData, {
-            onSuccess: () => {
-            alert("Transaksi berhasil dikirim!");
-            closeModal();
-            },
-            onError: (errors) => {
-            console.error(errors);
-            alert("Terjadi kesalahan saat menyimpan data.");
-            },
-        });
+    function tambahWajib() {
+        router.visit('/member/finances/add/wajib');
+    }
+
+    function tambahSukarela() {
+        router.visit('/member/finances/add/sukarela');
     }
 </script>
+
 
 <template>
     <Head title="Keuangan Anggota" />
@@ -101,10 +99,6 @@
                         <p class="tw-text-orange-600 tw-font-semibold">
                         Rp {{ props.simpanan.wajib.toLocaleString("id-ID") }}
                         </p>
-                        <button @click="openModal('Mandatory')" class="tw-bg-orange-500 tw-text-white tw-rounded-lg tw-px-3 tw-py-1 tw-text-sm hover:tw-brightness-110 tw-transition tw-mt-2" >
-                            <van-icon name="add-o" class="tw-text-lg" />
-                            Tambah
-                        </button>
                     </div>
                 </div>
 
@@ -117,119 +111,94 @@
                         <p class="tw-text-orange-600 tw-font-semibold">
                         Rp {{ props.simpanan.sukarela.toLocaleString("id-ID") }}
                         </p>
-                        <button @click="openModal('Voluntary')" class="tw-bg-orange-500 tw-text-white tw-rounded-lg tw-px-3 tw-py-1 tw-text-sm hover:tw-brightness-110 tw-transition tw-mt-2" >
-                            <van-icon name="add-o" class="tw-text-lg" />
-                            Tambah
-                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Modal -->
-        <Teleport to="body">
-        <div v-if="isModalOpen" class="tw-fixed tw-inset-0 tw-bg-black/50 tw-flex tw-items-center tw-justify-center tw-z-[9999]" >
-            <div class="tw-bg-white tw-rounded-xl tw-shadow-xl tw-w-96 tw-p-6">
-                <h3 class="tw-text-lg tw-font-semibold tw-text-center tw-mb-4">
-                    Tambah {{ modalLabel }}
-                </h3>
+        <div class="tw-p-5 tw-flex tw-flex-col tw-items-center tw-gap-5"> 
+            <div class="tw-rounded-2xl tw-w-full tw-p-6 tw-shadow-xl"> 
+                <h1 class="tw-text-xl tw-font-bold tw-text-center tw-text-black tw-mb-6 tw-tracking-wide"> 
+                History Top Up Simpanan
+                </h1> 
 
-                <div class="tw-text-left">
-                    <label class="tw-block tw-text-gray-700 tw-font-medium tw-mb-1"
-                    >Nominal Simpanan</label>
-                    <input v-model="nominal" type="number" placeholder="Masukkan nominal"
-                    class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-outline-none"
-                    />
+                <div class="tw-max-h-64 tw-overflow-y-auto tw-space-y-2">
+                    <!-- Ambil Semua History Top Up -->
+                    <div
+                    v-for="(item, index) in allHistory"
+                    :key="index"
+                    class="tw-rounded-xl tw-p-4 tw-shadow-md tw-flex tw-justify-between tw-items-center tw-mb-3 tw-text-white"
+                    :class="{
+                        'tw-bg-green-600': item.admin_user_id !== null && item.admin_user_id !== 0,
+                        'tw-bg-yellow-500': item.admin_user_id === null,
+                        'tw-bg-red-600': item.admin_user_id === 0
+                    }"
+                    >
+                        <div>
+                            <p class="tw-font-semibold tw-text-lg">Rp {{ Number(item.nominal).toLocaleString('id-ID') }}</p>
+                            <p class="tw-text-sm tw-opacity-90">{{ item.tanggal.toLocaleDateString('id-ID') }}</p>
+                        </div>
+                        <span class="tw-capitalize tw-font-medium">{{ item.status }}</span>
+                    </div>
                 </div>
-
-                <div class="tw-text-left">
-                    <label class="tw-block tw-mt-4 tw-text-gray-700 tw-font-medium tw-mb-1"
-                    >Catatan</label>
-                    <input v-model="catatan" type="text" placeholder="Tambahkan catatan (opsional)"
-                    class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2 focus:tw-ring-2 focus:tw-ring-indigo-500 focus:tw-outline-none"
-                    />
-                </div>
-
-                <!-- <div class="tw-text-left">
-                    <label class="tw-block tw-mt-4 tw-text-gray-700 tw-font-medium tw-mb-1"
-                    >Bukti Pembayaran</label>
-                    <input type="file" accept="image/*" @change="handleFileChange"
-                    class="tw-w-full tw-border tw-border-gray-300 tw-rounded-lg tw-px-3 tw-py-2"
-                    />
-                </div> -->
-
-                <div class="tw-flex tw-justify-center tw-gap-4 tw-mt-6">
-                    <button @click="closeModal"
-                    class="tw-bg-red-600 tw-text-white tw-rounded-lg tw-px-4 tw-py-2 hover:tw-brightness-110"
-                    >Batal</button>
-                    <button @click="simpanData"
-                    class="tw-bg-green-600 tw-text-white tw-rounded-lg tw-px-4 tw-py-2 hover:tw-brightness-110"
-                    >Simpan</button>
-                </div>
-            </div>
+            </div> 
         </div>
-        </Teleport>
 
-        <div class="tw-p-5 tw-flex tw-flex-col tw-items-center tw-gap-5">
-            <div class="tw-bg-gradient-to-r tw-from-blue-900 tw-to-orange-500 tw-rounded-2xl tw-w-full tw-text-white tw-p-6 tw-shadow-xl">
-                <h1 class="tw-text-xl tw-font-bold tw-text-center tw-mb-6 tw-tracking-wide">
-                History Simpanan Anggota
+        <div class="tw-p-5 tw-flex tw-flex-col tw-items-center tw-gap-5"> 
+            <div class="tw-rounded-2xl tw-w-full tw-text-white tw-p-6 tw-shadow-xl"> 
+                <h1 class="tw-text-xl tw-font-bold tw-text-center tw-text-black tw-mb-6 tw-tracking-wide"> 
+                    History Simpanan Anggota 
                 </h1>
+                <!-- History yang udah diterima (Udah masuk ke DB savings_accounts) -->
+                <van-cell-group>
+                    <van-cell 
+                        title="Simpanan Pokok" 
+                        :value= "'Rp ' + Number(props.historynominalsimpanan.nominalhistorypokok ?? 0).toLocaleString('id-ID')" 
+                        :label="props.historytanggalsimpanan.historypokok" 
+                    /> 
+                    <van-cell 
+                        title="Simpanan Wajib" 
+                        :value= "'Rp ' + Number(props.historynominalsimpanan.nominalhistorywajib ?? 0).toLocaleString('id-ID')" 
+                        :label="props.historytanggalsimpanan.historywajib" 
+                    /> 
+                    <van-cell 
+                        title="Simpanan Sukarela" 
+                        :value= "'Rp ' + Number(props.historynominalsimpanan.nominalhistorysukarela ?? 0).toLocaleString('id-ID')" 
+                        :label="props.historytanggalsimpanan.historysukarela" 
+                    /> 
+                </van-cell-group>
+            </div> 
+        </div>
 
-                <div class="tw-bg-white/20 tw-rounded-xl tw-p-4 tw-mb-4 tw-shadow-inner">
-                    <p class="tw-text-lg tw-font-semibold tw-mb-2 tw-text-white/90">Simpanan Pokok</p>
-                    <table class="tw-w-full tw-text-sm tw-text-left tw-border-collapse">
-                        <tbody>
-                            <tr class="hover:tw-bg-white/10 tw-transition">
-                                <td class="tw-py-2 tw-pr-3 tw-text-white/90">Tanggal Terakhir</td>
-                                <td class="tw-py-2 tw-pr-3">:</td>
-                                <td class="tw-py-2 tw-font-semibold">{{ props.historytanggalsimpanan.historypokok }}</td>
-                            </tr>
-                            <tr class="hover:tw-bg-white/10 tw-transition">
-                                <td class="tw-py-2 tw-pr-3 tw-text-white/90">Nominal Terakhir</td>
-                                <td class="tw-py-2 tw-pr-3">:</td>
-                                <td class="tw-py-2 tw-font-semibold">Rp {{ Number(props.historynominalsimpanan.nominalhistorypokok ?? 0).toLocaleString('id-ID') }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+        <div>
+            <!-- Floating Action Button -->
+            <button class="tw-fixed tw-bottom-20 tw-right-6 tw-bg-orange-500 tw-text-white tw-rounded-full tw-w-14 tw-h-14 tw-flex tw-items-center tw-justify-center tw-shadow-lg tw-cursor-pointer tw-transition-transform hover:tw-scale-110 tw-z-50"
+            @click="toggleMenu">
+                <span class="tw-text-3xl tw-font-bold tw-transition-transform tw-duration-300"
+                >+</span>
+            </button>
 
-                <div class="tw-bg-white/20 tw-rounded-xl tw-p-4 tw-mb-4 tw-shadow-inner">
-                    <p class="tw-text-lg tw-font-semibold tw-mb-2 tw-text-white/90">Simpanan Wajib</p>
-                    <table class="tw-w-full tw-text-sm tw-text-left tw-border-collapse">
-                        <tbody>
-                            <tr class="hover:tw-bg-white/10 tw-transition">
-                                <td class="tw-py-2 tw-pr-3 tw-text-white/90">Tanggal Terakhir</td>
-                                <td class="tw-py-2 tw-pr-3">:</td>
-                                <td class="tw-py-2 tw-font-semibold">{{ props.historytanggalsimpanan.historywajib }}</td>
-                            </tr>
-                            <tr class="hover:tw-bg-white/10 tw-transition">
-                                <td class="tw-py-2 tw-pr-3 tw-text-white/90">Nominal Terakhir</td>
-                                <td class="tw-py-2 tw-pr-3">:</td>
-                                <td class="tw-py-2 tw-font-semibold">Rp {{ Number(props.historynominalsimpanan.nominalhistorywajib ?? 0).toLocaleString('id-ID') }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <!-- Menu tambahan -->
+            <transition name="fade">
+                <div v-if="isOpen"
+                    class="tw-fixed tw-bottom-36 tw-right-6 tw-flex tw-flex-col tw-items-center tw-space-y-3 tw-z-50 tw-rounded-full"
+                >
+                    <van-button
+                    type="primary"
+                    icon="paid"
+                    class="tw-w-14 tw-h-14 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-shadow-lg tw-transition hover:tw-scale-110"
+                    @click="tambahWajib"
+                    >
+                    </van-button>
+                    <van-button
+                    type="success"
+                    icon="peer-pay"
+                    class="tw-w-14 tw-h-14 tw-rounded-full tw-flex tw-items-center tw-justify-center tw-shadow-lg tw-transition hover:tw-scale-110"
+                    @click="tambahSukarela"
+                    >
+                    </van-button>
                 </div>
-
-                <div class="tw-bg-white/20 tw-rounded-xl tw-p-4 tw-shadow-inner">
-                    <p class="tw-text-lg tw-font-semibold tw-mb-2 tw-text-white/90">Simpanan Sukarela</p>
-                    <table class="tw-w-full tw-text-sm tw-text-left tw-border-collapse">
-                        <tbody>
-                            <tr class="hover:tw-bg-white/10 tw-transition">
-                                <td class="tw-py-2 tw-pr-3 tw-text-white/90">Tanggal Terakhir</td>
-                                <td class="tw-py-2 tw-pr-3">:</td>
-                                <td class="tw-py-2 tw-font-semibold">{{ props.historytanggalsimpanan.historysukarela }}</td>
-                            </tr>
-                            <tr class="hover:tw-bg-white/10 tw-transition">
-                                <td class="tw-py-2 tw-pr-3 tw-text-white/90">Nominal Terakhir</td>
-                                <td class="tw-py-2 tw-pr-3">:</td>
-                                <td class="tw-py-2 tw-font-semibold">Rp {{ Number(props.historynominalsimpanan.nominalhistorysukarela ?? 0).toLocaleString('id-ID') }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            </transition>
         </div>
     </AuthenticatedLayout>
 </template>
